@@ -3,14 +3,15 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
-const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const notificationRoutes = require('./routes/notification');
 
 const app = express();
 
 mongoose
   .set('useCreateIndex', true)
   .set('useUnifiedTopology', true)
-  .connect("mongodb+srv://admin:" + process.env.MONGO_ATLAS_PW + "@main-infra-wtsbl.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
+  .connect("mongodb+srv://Bobby:" + process.env.MONGO_ATLAS_PW + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => {
       console.log('connected to database');
     })
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/notification", notificationRoutes);
 
 module.exports = app;

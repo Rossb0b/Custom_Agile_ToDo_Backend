@@ -47,6 +47,9 @@ const port = normalizePort(process.env.PORT || "3030");
 app.set("port", port);
 
 const server = http.createServer(app);
+
+const notification = require('./io/notification')(server);
+
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
