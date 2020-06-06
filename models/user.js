@@ -5,10 +5,10 @@ const Organisation = require('./organisation');
 
 const userSchema = mongoose.Schema({
     email: {
-        type: String,
-        required: true,
-        unique: true,
-      },
+      type: String,
+      required: true,
+      unique: true,
+    },
     password: {
       type: String,
       required: true,
@@ -23,8 +23,7 @@ const userSchema = mongoose.Schema({
     },
     organisation: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: Organisation,
-      required: true
+      ref: 'Organisation',
     }]
 });
 

@@ -22,6 +22,7 @@ exports.createUser = async (req, res, next) => {
       result: result
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       message: 'Creation failed',
     });

@@ -1,6 +1,7 @@
 const User = require('../models/user');
-const userNotification = require('../models/notification');
+const UserNotification = require('../models/notification');
 const userController = require('../controllers/user');
+const notificationController = require('../controllers/notification');
 
 module.exports = function(http) {
     const io = require('socket.io')(http, { path: '/socket' });
@@ -129,7 +130,7 @@ module.exports = function(http) {
      */
     CreateNotification = async (notification) => {
         try {
-            // Notification controller to create.
+            await notificationController.createNotification(notification);
         } catch (e) {
             console.log(e);
         }

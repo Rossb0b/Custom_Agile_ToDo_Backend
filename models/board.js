@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const Methodology = require('./methodology');
+const MethodologyRole = require('./methodologyRole');
 const User = require('./user');
 
 const boardSchema = mongoose.Schema({
@@ -20,6 +20,7 @@ const boardSchema = mongoose.Schema({
     methodology: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology',
+        required: true,
         unique: true,
     },
     springDuration: {
@@ -43,7 +44,7 @@ const boardSchema = mongoose.Schema({
         },
         role: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Methodology.role',
+            ref: 'MethodologyRole',
             required: true,
         }
     }],
