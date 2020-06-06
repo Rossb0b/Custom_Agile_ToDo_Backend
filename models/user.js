@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const Organisation = require('./organisation');
+const Organization = require('./organization');
 
 const userSchema = mongoose.Schema({
     email: {
@@ -21,9 +21,9 @@ const userSchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    organisation: [{
+    organization: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Organisation',
+      ref: 'Organization',
     }]
 });
 

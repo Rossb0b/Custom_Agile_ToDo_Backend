@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const User = require('./user');
-const OrganisationRole = require('./organisationRole');
+const OrganizationRole = require('./organizationRole');
 const Methodology = require('./methodology');
 
-const organisationSchema = mongoose.Schema({
+const organizationSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -19,7 +19,7 @@ const organisationSchema = mongoose.Schema({
         },
         roleId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'OrganisationRole',
+            ref: 'OrganizationRole',
             required: true,
         },
     }],
@@ -41,6 +41,6 @@ const organisationSchema = mongoose.Schema({
     }],
 });
 
-organisationSchema.plugin(uniqueValidator);
+organizationSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('Organisation', organisationSchema);
+module.exports = mongoose.model('Organization', organizationSchema);

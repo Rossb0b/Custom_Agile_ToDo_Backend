@@ -48,12 +48,12 @@ module.exports = function(http) {
             }
         });
 
-        socket.on('notification/invite_organisation', async (data) => {
-            const path = 'notification/organisation/invitation';
+        socket.on('notification/invite_organization', async (data) => {
+            const path = 'notification/organization/invitation';
 
             if (data.userEmail) {
                 const notification = new UserNotification();
-                message = data.organisationName + ', invited you to join them';
+                message = data.organizationName + ', invited you to join them';
 
                 try {
                     const receiverId = findUserId(data.userEmail);
@@ -67,7 +67,7 @@ module.exports = function(http) {
                     console.log(e);
                 }
             } else {
-                message = 'Failed to send the invitation. You must target a current user email address and must be into your organisation administration panel.';
+                message = 'Failed to send the invitation. You must target a current user email address and must be into your organization administration panel.';
 
                 try {
                     socket.emit(path, message);
@@ -77,11 +77,11 @@ module.exports = function(http) {
             }
         });
 
-        socket.on('notification/acceptation_organisation', async (data) => {
+        socket.on('notification/acceptation_organization', async (data) => {
 
         });
 
-        socket.on('notification/rejection_organisation', async (data) => {
+        socket.on('notification/rejection_organization', async (data) => {
 
         });
 
@@ -94,7 +94,7 @@ module.exports = function(http) {
         });
 
         socket.on('notification/acceptation', async (data) => {
-            if (data.event === 'organisation') {
+            if (data.event === 'organization') {
 
             } else if (data.event === 'board') {
 
@@ -102,7 +102,7 @@ module.exports = function(http) {
         });
 
         socket.on('notification/rejection', async (data) => {
-            if (data.event === 'organisation') {
+            if (data.event === 'organization') {
 
             } else if (data.event === 'board') {
 

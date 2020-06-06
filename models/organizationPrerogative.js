@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const organisationPrerogativeSchema = mongoose.Schema({
+const organizationPrerogativeSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -13,6 +13,6 @@ const organisationPrerogativeSchema = mongoose.Schema({
     },
 });
 
-organisationPrerogativeSchema.plugin(uniqueValidator);
+organizationPrerogativeSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('OrganisationPrerogative', organisationPrerogativeSchema);
+module.exports = mongoose.model('OrganizationPrerogative', organizationPrerogativeSchema);
