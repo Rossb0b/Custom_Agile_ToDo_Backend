@@ -15,7 +15,7 @@ const methodologyRoleSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BoardPrerogative'
     }],
-    methdologyId: {
+    methodologyId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology',
         required: true,
