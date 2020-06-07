@@ -23,15 +23,15 @@ const boardSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    springDuration: {
+    sprintDuration: {
         type: Number,
         required: true,
     },
-    actualSpringNumber: {
+    actualSprintNumber: {
         type: Number,
         required: true,
     },
-    maxSpringNumber: {
+    maxSprintNumber: {
         type: Number,
         required: true,
     },
