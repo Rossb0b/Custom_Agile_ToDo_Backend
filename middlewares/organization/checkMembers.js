@@ -1,6 +1,5 @@
 const User = require('../../models/user');
 const Role = require('../../models/organizationRole');
-const mongoose = require('mongoose');
 
 module.exports = (req, res, next) => {
     try {
