@@ -6,9 +6,9 @@ const Organization = require('../models/organization');
 @returns {json{ message<string>, organization<Organization>}}
 *
 */
-exports.createOrganization = async (data) => {
+exports.createOrganization = async (req, res, next) => {
 
-    const organization = new Organization(data);
+    const organization = new Organization(req.body.organization);
 
     organization.validate(async (error) => {
         if (error) {
