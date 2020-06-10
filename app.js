@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
 const notificationRoutes = require('./routes/notification');
+const organizationRoutes = require('./routes/organization');
 
 const app = express();
 
@@ -38,5 +39,6 @@ app.use((req, res, next) => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/organization", organizationRoutes);
 
 module.exports = app;
