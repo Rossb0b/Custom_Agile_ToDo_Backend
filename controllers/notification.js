@@ -64,7 +64,7 @@ exports.getNotificationsForThisUser = async (req, res, next) => {
 exports.deleteNotification = async (notificationId) => {
     try {
         const result = await Notification.deleteOne({
-            _id: notificatioNId,
+            _id: notificationId,
           });
       
           if(result.n > 0) {
