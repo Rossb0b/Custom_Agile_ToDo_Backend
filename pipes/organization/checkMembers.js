@@ -11,6 +11,8 @@ module.exports = async (organization, userData) => {
                 userId: reqOwner.userId,
                 roleId: (await Role.find({name: 'ADMIN'}))._id
             });
+        } else {
+            return [];
         }
 
         // Check members list
