@@ -3,23 +3,12 @@ node_js:
  - "12.16.1"
 branches:
   only:
-  - staging
   - dev
 deploy:
   - provider: elasticbeanstalk
     access_key_id: ${AWS_ACCESS_KEY_ID}
     secret_access_key: ${AWS_SECRET_ACCESS_KEY}
-    region: "ap-south-1"       
-    app: "ClubAgile-backend"                     
-    env: "ClubAgile-backend-staging"                     
-    bucket_name: ${AWS_S3_BUCKET} 
-    on:
-      branch: "staging"
-
-  - provider: elasticbeanstalk
-    access_key_id: ${AWS_ACCESS_KEY_ID}
-    secret_access_key: ${AWS_SECRET_ACCESS_KEY}
-    region: "ap-south-1"       
+    region: "us-east-2"
     app: "ClubAgile-backend"                     
     env: "ClubAgile-backend-production"                     
     bucket_name: ${AWS_S3_BUCKET}
