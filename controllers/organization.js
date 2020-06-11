@@ -39,11 +39,11 @@ exports.createOrganization = async (req, res, next) => {
             });
         } else {
             try {
-                // const createdOrga = await organization.save();
+                const createdOrga = await organization.save();
                 // console.log(createdOrga);
                 return res.status(201).json({
-                    message: 'Organization created'
-                    // organization: createdOrga
+                    message: 'Organization created',
+                    organization: createdOrga
                 });
             } catch (error) {
                 console.log(error);
