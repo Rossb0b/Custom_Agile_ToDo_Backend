@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.post("", UserController.createUser);
 
+router.get("", checkAuth, UserController.getUserFromJWT);
+
 module.exports = router;
