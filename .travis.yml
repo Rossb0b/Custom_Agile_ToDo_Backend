@@ -10,7 +10,7 @@ deploy:
     secret_access_key: ${AWS_SECRET_ACCESS_KEY}
     region: "us-east-2"
     app: "ClubAgile-backend"                     
-    env: "ClubAgile-backend-production"                     
+    env: "ClubagileBackend-env"                     
     bucket_name: ${AWS_S3_BUCKET}
     on:
       branch: "dev"
