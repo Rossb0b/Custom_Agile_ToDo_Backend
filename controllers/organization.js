@@ -1,8 +1,8 @@
 const Organization = require('../models/organization');
 
-const CheckMembers = require('../pipes/organization/checkMembers');
-const CheckMethodology = require('../pipes/organization/checkMethodology');
-const CheckBoard = require('../pipes/organization/checkBoards');
+const checkMembers = require('../pipes/organization/checkMembers');
+const checkMethodology = require('../pipes/organization/checkMethodology');
+const checkBoard = require('../pipes/organization/checkBoards');
 
 /**
 * Async method to create Organization
@@ -15,9 +15,9 @@ exports.createOrganization = async (req, res, next) => {
     try {
         let hasError = [];
 
-        req.body.organization.member = await CheckMembers(req.body.organization.member, req.userData);
-        req.body.organization.methodology = await CheckMethodology(req.body.organization.methodology);
-        req.body.organization.board = await CheckBoard(req.body.organization.board);
+        req.body.organization.member = await checkMembers(req.body.organization.member, req.userData);
+        req.body.organization.methodology = await checkMethodology(req.body.organization.methodology);
+        req.body.organization.board = await checkBoard(req.body.organization.board);
 
         if (req.body.organization.member.length === 0) hasError.push('Organization need one member at least.');
 
