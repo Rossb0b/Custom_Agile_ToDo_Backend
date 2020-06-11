@@ -1,6 +1,6 @@
 const Methodology = require('../../models/user');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     try {
         const metho = req.body.organization.methodology;
         let newArr = [];

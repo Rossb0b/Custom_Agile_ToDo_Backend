@@ -1,6 +1,6 @@
 const Board = require('../../models/board');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     try {
         const boards = req.body.organization.board;
         let newArr = [];

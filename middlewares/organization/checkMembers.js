@@ -1,7 +1,7 @@
 const User = require('../../models/user');
 const Role = require('../../models/organizationRole');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     try {
         const organization = req.body.organization.member;
         let newArr = [];
