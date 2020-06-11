@@ -13,7 +13,7 @@ const app = express();
 mongoose
   .set('useCreateIndex', true)
   .set('useUnifiedTopology', true)
-  .connect("mongodb+srv://Bobby:" + process.env.MONGO_ATLAS_PW + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
+  .connect("mongodb+srv://Bobby:" + "XXFrFPHULs8C7nVM" + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => {
       console.log('connected to database');
     })
