@@ -1,8 +1,10 @@
 const Board = require('../../models/board');
 
-module.exports = async (req, res, next) => {
+module.exports = async (data) => {
+    console.log('CHECK BOARD');
+
     try {
-        const boards = req.body.organization.board;
+        const boards = data;
         let newArr = [];
         for (let i = 0; i < boards.length; i++) {
             const resBoard = await Board.findById(boards[i].boardId);
@@ -11,11 +13,9 @@ module.exports = async (req, res, next) => {
                 newArr.push(boards[i]);
             }
         }
-        req.body.organization.board = newArr;
-        next();
+        return newArr;
     } catch (error) {
-        return res.status(500).json({
-            message: 'Unexpected error occured'
-        });
+        console.log(error);
+        return false;
     }
 }

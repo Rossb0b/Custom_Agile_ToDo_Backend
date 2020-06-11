@@ -1,14 +1,13 @@
 const User = require('../../models/user');
 const Role = require('../../models/organizationRole');
 
-module.exports = async (req, res, next) => {
+module.exports = async (organization, userData) => {
+    console.log('CHECK MEMBERS');
     try {
-        const organization = req.body.organization.member;
         let newArr = [];
 
         // A admin by default
-        const reqOwner = req.userData;
-        if (reqOwner.userId) {
+        if (userData != undefined) {
             newArr.push({
                 userId: reqOwner.userId,
                 roleId: (await Role.find({name: 'ADMIN'}))._id
@@ -26,18 +25,9 @@ module.exports = async (req, res, next) => {
             }
         }
 
-        // if valid members array is empty
-        if (newArr.length === 0) {
-            return res.status(400).json({
-                message: 'Error with members'
-            });
-        }
-
-        req.body.organization.member = newArr;
-        next();
+        return newArr;
     } catch (error) {
-        return res.status(500).json({
-            message: 'Unexpected error occured'
-        });
+        console.log(error);
+        return false;
     }
 }

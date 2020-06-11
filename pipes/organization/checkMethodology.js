@@ -1,8 +1,10 @@
 const Methodology = require('../../models/user');
 
-module.exports = async (req, res, next) => {
+module.exports = async (data) => {
+    console.log('CHECK METHO');
+
     try {
-        const metho = req.body.organization.methodology;
+        const metho = data;
         let newArr = [];
         for (let i = 0; i < metho.length; i++) {
             const resMetho = await Methodology.findById(metho[i].methodologyId);
@@ -11,11 +13,9 @@ module.exports = async (req, res, next) => {
                 newArr.push(metho[i]);
             }
         }
-        req.body.organization.methodology = newArr;
-        next();
+        return newArr;
     } catch (error) {
-        return res.status(500).json({
-            message: 'Unexpected error occured'
-        });
+        console.log(error);
+        return false;
     }
 }
