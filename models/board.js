@@ -51,7 +51,6 @@ const boardSchema = mongoose.Schema({
     card: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Card',
-        required: true,
     }]
 });
 
