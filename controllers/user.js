@@ -34,6 +34,19 @@ hashPassword = (password) => {
   return bcrypt.hash(password, 10);
 };
 
+exports.getUserFromJWT = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.userData.userId);
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(401).json({
+      message: 'Fetching user failed', e: e,
+    });
+  }
+
+};
+
 /**
  * Async method that find the user.id for the given user.email
  *
