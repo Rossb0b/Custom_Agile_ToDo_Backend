@@ -11,7 +11,6 @@ const checkBoard = require('../pipes/organization/checkBoards');
 *
 */
 exports.createOrganization = async (req, res, next) => {
-
     try {
         let hasError = [];
 
