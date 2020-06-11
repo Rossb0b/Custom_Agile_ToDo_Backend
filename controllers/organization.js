@@ -23,7 +23,7 @@ exports.createOrganization = async (req, res, next) => {
 
         if(hasError.length > 0) throw hasError;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(400).json({
             message: 'Error 1st try',
             error: error
@@ -33,7 +33,7 @@ exports.createOrganization = async (req, res, next) => {
     const organization = new Organization(req.body.organization);
     organization.validate(async (error) => {
         if (error) {
-            console.log('erroooooooooooooooooooor')
+            // console.log(error);
             return res.status(500).json({
                 message: 'Not valid organization'
             });
@@ -46,7 +46,7 @@ exports.createOrganization = async (req, res, next) => {
                     organization: createdOrga
                 });
             } catch (error) {
-                console.log(error);
+                // console.log(error);
                 return res.status(500).json({
                     message: 'Unknown error'
                 });

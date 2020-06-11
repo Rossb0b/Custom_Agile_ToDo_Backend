@@ -2,11 +2,10 @@ const User = require('../../models/user');
 const Role = require('../../models/organizationRole');
 
 module.exports = async (organization, userData) => {
-    console.log('CHECK MEMBERS');
     try {
         let newArr = [];
 
-        // A admin by default
+        // Add admin by default
         if (userData != undefined) {
             newArr.push({
                 userId: reqOwner.userId,
@@ -27,7 +26,7 @@ module.exports = async (organization, userData) => {
 
         return newArr;
     } catch (error) {
-        console.log(error);
-        return false;
+        // console.log(error);
+        return [];
     }
 }

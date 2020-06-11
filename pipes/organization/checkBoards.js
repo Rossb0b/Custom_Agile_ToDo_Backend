@@ -1,8 +1,6 @@
 const Board = require('../../models/board');
 
 module.exports = async (data) => {
-    console.log('CHECK BOARD');
-
     try {
         const boards = data;
         let newArr = [];
@@ -15,7 +13,7 @@ module.exports = async (data) => {
         }
         return newArr;
     } catch (error) {
-        console.log(error);
-        return false;
+        // console.log(error);
+        return [];
     }
 }
