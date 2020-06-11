@@ -25,8 +25,7 @@ exports.createOrganization = async (req, res, next) => {
     } catch (error) {
         // console.log(error);
         return res.status(400).json({
-            message: 'Error 1st try',
-            error: error
+            message: error.join(' ')
         });
     }
 
