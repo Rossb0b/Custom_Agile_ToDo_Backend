@@ -52,7 +52,7 @@ exports.userLogin = async (req, res, next) => {
 jwtSign = ({ email, userId }) => {
     return jwt.sign(
       { email: email, userId: userId },
-      process.env.JWT_KEY,
+      "rS)Td:>08Z}E?>6_x(}sX|DpdJms/Wf6Aw#lI0$^gH`$p,*h#p:vjjfSq,pDd]h",
       { expiresIn: '1h' },
     );
   };
