@@ -11,7 +11,7 @@ const checkBoard = require('../pipes/organization/checkBoards');
 *
 */
 exports.createOrganization = async (req, res, next) => {
-    const organization = new Organization(req.body.organization);
+    const organization = new Organization(req.body);
     try {
         let hasError = [];
 
@@ -33,7 +33,9 @@ exports.createOrganization = async (req, res, next) => {
         if (error) {
             // console.log(error.errors);
             return res.status(500).json({
-                message: error.errors
+                organization: organization,
+                message: 'Unknow error',
+                error: error.errors
             });
         } else {
             try {
@@ -46,7 +48,8 @@ exports.createOrganization = async (req, res, next) => {
             } catch (error) {
                 // console.log(error);
                 return res.status(500).json({
-                    message: error
+                    message: 'Organization creation failed',
+                    error: error,
                 });
             }
         }
