@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 /**
@@ -32,6 +32,19 @@ exports.createUser = async (req, res, next) => {
  */
 hashPassword = (password) => {
   return bcrypt.hash(password, 10);
+};
+
+exports.getUserFromJWT = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.userData.userId);
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(401).json({
+      message: 'Fetching user failed', e: e,
+    });
+  }
+
 };
 
 /**
