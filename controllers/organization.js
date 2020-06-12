@@ -11,15 +11,15 @@ const checkBoard = require('../pipes/organization/checkBoards');
 *
 */
 exports.createOrganization = async (req, res, next) => {
-
+    const organization = new Organization(req.body.organization);
     try {
         let hasError = [];
 
-        req.body.organization.member = await checkMembers(req.body.organization.member, req.userData);
-        req.body.organization.methodology = await checkMethodology(req.body.organization.methodology);
-        req.body.organization.board = await checkBoard(req.body.organization.board);
+        organization.member = await checkMembers(organization.member, req.userData, organization.role);
+        organization.methodology = await checkMethodology(organization.methodology);
+        organization.board = await checkBoard(organization.board);
 
-        if (req.body.organization.member.length === 0) hasError.push('Organization need one member at least.');
+        if (organization.member.length === 0) hasError.push('Organization need one member at least.');
 
         if(hasError.length > 0) throw hasError;
     } catch (error) {
@@ -29,12 +29,11 @@ exports.createOrganization = async (req, res, next) => {
         });
     }
 
-    const organization = new Organization(req.body.organization);
     organization.validate(async (error) => {
         if (error) {
-            // console.log(error);
+            // console.log(error.errors);
             return res.status(500).json({
-                message: 'Not valid organization'
+                message: error.errors
             });
         } else {
             try {
@@ -47,7 +46,7 @@ exports.createOrganization = async (req, res, next) => {
             } catch (error) {
                 // console.log(error);
                 return res.status(500).json({
-                    message: 'Unknown error'
+                    message: error
                 });
             }
         }

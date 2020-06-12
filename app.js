@@ -7,6 +7,10 @@ const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
 const notificationRoutes = require('./routes/notification');
 const organizationRoutes = require('./routes/organization');
+const organizationRoleRoutes = require('./routes/organizationRole');
+const organizationPrerogativeRoutes = require('./routes/organizationPrerogative');
+
+
 
 const app = express();
 
@@ -42,5 +46,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/organization", organizationRoutes);
+app.use("/api/organizationRole", organizationRoleRoutes);
+app.use("/api/organizationPrerogative", organizationPrerogativeRoutes);
 
 module.exports = app;

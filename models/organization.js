@@ -15,43 +15,33 @@ const organizationSchema = mongoose.Schema({
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true,
         },
         roleId: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
         },
-        customRole: {
+        hasCustomRole: {
             type: Boolean,
-            required: true,
-        },
+        }
     }],
-    customRole: [{
+    role: [{
         name: {
             type: String,
-            required: true,
-            unique: true
         },
         prerogativeId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'OrganizationPrerogative',
-            required: true
         }
     }],
     methodology: [{
         methodologyId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Methodology',
-            required: false,
-            unique: true,
         }
     }],
     board: [{
         boardId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Board',
-            required: false,
-            unique: true,
         }
     }],
 });
