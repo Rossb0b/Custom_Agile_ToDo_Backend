@@ -12,16 +12,16 @@ exports.createPrerogative = async (req, res, next) => {
         prerogative.validate(async (error) => {
             if (error) {
                 // console.log(error);
-            return res.status(500).json({
-                message: 'Not valid prerogative'
-            });
+                return res.status(500).json({
+                    message: 'Not valid prerogative'
+                });
             } else {
                 try {
-                    const createdPrerogative = await role.save();
-                    console.log(createdPrerogative);
+                    const createdPrerogative = await prerogative.save();
+                    // console.log(createdPrerogative);
                     return res.status(201).json({
                         message: 'Prerogative created',
-                        role: createdPrerogative
+                        prerogative: createdPrerogative
                     });
                 } catch (error) {
                     // console.log(error);
@@ -32,6 +32,9 @@ exports.createPrerogative = async (req, res, next) => {
             }
         });
     } catch (error) {
-        
+        // console.log(error);
+        return res.status(500).json({
+            message: 'Unknown error'
+        });
     }
 };
