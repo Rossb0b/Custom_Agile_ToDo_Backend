@@ -1,5 +1,5 @@
 const express = require('express');
-const PrerogativeController = require('../controllers/organization');
+const PrerogativeController = require('../controllers/orgaPrerogative');
 const AuthGuard = require('../middlewares/auth/check-auth');
 
 const router = express.Router();
