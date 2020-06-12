@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const Organization = require('../models/organization');
+const Board = require('../models/board');
 
 /**
  * Async method to connect a User
@@ -31,13 +33,32 @@ exports.userLogin = async (req, res, next) => {
             message: 'Auth failed'
         });
       }
+
+      const {password, ...formatedUser} = user;
+      
+      for(let i = 0; i < formatedUser.organization.length; i++) {
+        const result = await Organization.findById(formatedUser.organization[i]);
+        
+        // const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
+        const boards = (await Board.find({organizationId: result._id})).where(function() {
+          return this.member.includes(formatedUser._id);
+        });
+
+        formatedUser.organization[i] = {
+          _id: result._id,
+          name: result.name,
+          memberCount: result.memberCount,
+          lastActivity: await Board.findById(result.lastActivity, 'name'),
+          activeProjectsCount: boards.length
+        };
+      }
   
-      const token = jwtSign({ email: user.email, userId: user._id });
+      const token = jwtSign({ email: formatedUser.email, userId: formatedUser._id });
   
-      res.status(200).json({
+      return res.status(200).json({
         token: token,
         expiresIn: 3600,
-        user: user
+        user: formatedUser
       });
     } catch (e) {
       res.status(401).json({
