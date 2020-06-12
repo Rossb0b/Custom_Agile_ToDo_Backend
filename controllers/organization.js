@@ -41,7 +41,7 @@ exports.createOrganization = async (req, res, next) => {
                 // console.log(createdOrga);
                 return res.status(201).json({
                     message: 'Organization created',
-                    organization: createdOrga
+                    organizationId: createdOrga._id
                 });
             } catch (error) {
                 // console.log(error);
@@ -51,4 +51,25 @@ exports.createOrganization = async (req, res, next) => {
             }
         }
     });
+};
+
+exports.getById = async (req, res, next) => {
+    try {
+        const result = await Organization.findById(req.params.id);
+        if (result === null) {
+            return res.status(404).json({
+                message: 'Organization not found'
+            });
+        } else {
+            return res.status(200).json({
+                message: 'Sisi la street',
+                organization: result
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
 };
