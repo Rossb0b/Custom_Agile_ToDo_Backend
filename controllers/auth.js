@@ -34,16 +34,12 @@ exports.userLogin = async (req, res, next) => {
       });
     }
 
-    const {password, ...formatedUser} = user;
-    
+    const {password, ...formatedUser} = user._doc;
     for(let i = 0; i < formatedUser.organization.length; i++) {
-      const result = await Organization.findById(formatedUser.organization[i]);
+      const result = (await Organization.findById(formatedUser.organization[i]))._doc;
       
-      // const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
-      const boards = (await Board.find({organizationId: result._id})).where(function() {
-        return this.member.includes(formatedUser._id);
-      });
-
+      const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
+      
       formatedUser.organization[i] = {
         _id: result._id,
         name: result.name,
@@ -61,6 +57,7 @@ exports.userLogin = async (req, res, next) => {
       user: formatedUser
     });
   } catch (e) {
+    console.log(e);
     res.status(401).json({
       message: 'Unknown error', e: e
     });
