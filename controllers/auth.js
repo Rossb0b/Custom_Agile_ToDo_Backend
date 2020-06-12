@@ -36,8 +36,8 @@ exports.userLogin = async (req, res, next) => {
 
     const {password, ...formatedUser} = user._doc;
     for(let i = 0; i < formatedUser.organization.length; i++) {
-      const result = (await Organization.findById(formatedUser.organization[i]))._doc;
-      
+      const result = (await Organization.findById(formatedUser.organization[i]));
+      console.log(result);
       const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
       
       formatedUser.organization[i] = {
