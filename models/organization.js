@@ -33,17 +33,17 @@ const organizationSchema = mongoose.Schema({
         }
     }],
     methodology: [{
-        methodologyId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Methodology',
-        }
     }],
     board: [{
-        boardId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Board',
-        }
     }],
+    lastActivity: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Board',
+    }
 });
 
 organizationSchema.plugin(uniqueValidator);
