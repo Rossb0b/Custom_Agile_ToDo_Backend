@@ -33,8 +33,7 @@ exports.createOrganization = async (req, res, next) => {
         if (error) {
             // console.log(error.errors);
             return res.status(500).json({
-                organization: organization,
-                message: 'Unknow error',
+                message: 'Unknown error',
                 error: error.errors
             });
         } else {
