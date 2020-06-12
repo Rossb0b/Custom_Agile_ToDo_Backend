@@ -51,7 +51,12 @@ const boardSchema = mongoose.Schema({
     card: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Card',
-    }]
+    }],
+    organizationId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization',
+        required: true
+    }
 });
 
 boardSchema.plugin(uniqueValidator);
