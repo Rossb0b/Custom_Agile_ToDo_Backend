@@ -1,7 +1,7 @@
 const User = require('../../models/user');
-const Role = require('../../models/organizationRole');
+const Prerogative = require('../../models/organizationPrerogative');
 
-module.exports = async (organization, userData) => {
+module.exports = async (members, userData, role) => {
     try {
         let newArr = [];
 
@@ -9,23 +9,36 @@ module.exports = async (organization, userData) => {
         if (userData != undefined) {
             newArr.push({
                 userId: reqOwner.userId,
-                roleId: (await Role.find({name: 'ADMIN'}))._id
+                roleId: (await Prerogative.find({name: 'ADMIN'}))._id
             });
         } else {
             return [];
         }
 
         // Check members list
-        for (let i = 0; i < organization.length; i++) {
-            const resUser = await User.findById(organization[i].userId);
-            const resRole = await Role.findById(organization[i].roleId);
+        for (let i = 0; i < members.length; i++) {
+            const resUser = await User.findById(members[i].userId);
+            let resRole;
+            if (!members[i].hasCustomRole) {
+                // console.log('Has not custom role');
+                resRole = await Prerogative.findById(members[i].roleId);
+            } else {
+                // console.log('Has custom role');
+                resRole = role.filter(x => x._id === members[i].roleId)[0];
+            }
+            // console.log(resUser, resRole);
 
             // if both responses are valid
-            if(resUser && resRole) {
-                newArr.push(organization[i]);
+            if (resUser !== null) {
+                if(typeof resRole === Array) {
+                    if (resRole.length === 1) newArr.push(members[i]);
+                } else if (resRole !== null)  newArr.push(members[i]);
+            } else {
+                console.log('ISSUE RES ROLE');
+                console.log(resUser, resRole);
             }
         }
-
+        // console.log(newArr);
         return newArr;
     } catch (error) {
         // console.log(error);
