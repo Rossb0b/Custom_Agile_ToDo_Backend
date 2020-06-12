@@ -62,7 +62,7 @@ exports.getById = async (req, res, next) => {
             });
         } else {
             return res.status(200).json({
-                message: 'Sisi la street',
+                message: 'Organization fetched with success',
                 organization: result
             })
         }
