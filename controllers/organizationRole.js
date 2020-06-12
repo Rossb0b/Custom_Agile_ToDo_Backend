@@ -29,7 +29,7 @@ exports.createRole = async (req, res, next) => {
                 const createdRole = await role.save();
                 console.log(createdRole);
                 return res.status(201).json({
-                    message: 'Organization created',
+                    message: 'Role created',
                     role: createdRole
                 });
             } catch (error) {
