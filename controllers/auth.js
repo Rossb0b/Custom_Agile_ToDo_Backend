@@ -57,7 +57,7 @@ exports.userLogin = async (req, res, next) => {
       user: formatedUser
     });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(401).json({
       message: 'Unknown error', e: e
     });
