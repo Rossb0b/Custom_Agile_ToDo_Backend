@@ -8,7 +8,7 @@ module.exports = async (members, userData, role) => {
         // Add admin by default
         if (userData != undefined) {
             newArr.push({
-                userId: reqOwner.userId,
+                userId: userData.userId,
                 roleId: (await Prerogative.find({name: 'ADMIN'}))._id
             });
         } else {
@@ -20,25 +20,18 @@ module.exports = async (members, userData, role) => {
             const resUser = await User.findById(members[i].userId);
             let resRole;
             if (!members[i].hasCustomRole) {
-                // console.log('Has not custom role');
                 resRole = await Prerogative.findById(members[i].roleId);
             } else {
-                // console.log('Has custom role');
                 resRole = role.filter(x => x._id === members[i].roleId)[0];
             }
-            // console.log(resUser, resRole);
 
             // if both responses are valid
             if (resUser !== null) {
                 if(typeof resRole === Array) {
                     if (resRole.length === 1) newArr.push(members[i]);
                 } else if (resRole !== null)  newArr.push(members[i]);
-            } else {
-                console.log('ISSUE RES ROLE');
-                console.log(resUser, resRole);
             }
         }
-        // console.log(newArr);
         return newArr;
     } catch (error) {
         // console.log(error);
