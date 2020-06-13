@@ -7,9 +7,12 @@ module.exports = async (members, userData, role) => {
 
         // Add admin by default
         if (userData != undefined) {
+            const resRoleId = (await Prerogative.find({name: 'ADMIN'}));
+            if (resRoleId.length < 1 || resRoleId.length > 1) return [];
             newArr.push({
                 userId: userData.userId,
-                roleId: (await Prerogative.find({name: 'ADMIN'}))._id
+                roleId: resRoleId._id,
+                hasCustomRole: false
             });
         } else {
             return [];
