@@ -79,25 +79,61 @@ exports.editBoard = async (req, res) => {
     });
 }
 
-exports.getBoards = async (req, res) => {
+exports.getBoardsByUser = async (req, res) => {
     try {
       const boards = await Board.find({
         member: {
             user: {
-                "$in" : [req.query.userId]
+                "$in" : req.params.id
                 }
             }
       });
       res.status(200).json({
-        message: 'Boards successfully fetched',
+        message: 'Fetching boards for user succeed',
         boards: boards,
       });
     } catch (e) {
       res.status(500).json({
-        message: 'Fetching boards failed'
+        message: 'Fetching boards for user failed',
+        e: e,
       });
     }
-  };
+};
+
+exports.getBoardsByOrganization = async (req, res) => {
+    try {
+        const boards = await Board.find({
+            organizationId: {
+                "$in" : req.params.id
+            }
+        });
+        res.status(200).json({
+            message: 'Fetching boards for organization succeed',
+            boards: boards,
+        });
+    } catch (e) {
+        res.status(500).json({
+            message: 'Fetching boards for organization failed',
+            e: e,
+        });
+    }
+}
+
+exports.getById = async (req, res) => {
+    try {
+        const board = await board.findById(req.params.id);
+        res.status(200).json({
+            message: 'board fetched with success',
+            board: board,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            message: 'Fetching board failed',
+            e: e,
+        });
+    }
+}
 
 exports.deleteBoard = async (req, res) => {
     try {
@@ -111,6 +147,7 @@ exports.deleteBoard = async (req, res) => {
     } catch (e) {
       res.status(401).json({
         message: 'deletion failed',
+        e: e,
       });
     }
   };
