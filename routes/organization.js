@@ -10,4 +10,16 @@ router.post(
     OrganizationController.createOrganization
 );
 
+router.get(
+    '/:id',
+    AuthGuard,
+    OrganizationController.getById
+);
+
+router.get(
+    '',
+    AuthGuard,
+    OrganizationController.getAll
+);
+
 module.exports = router;
