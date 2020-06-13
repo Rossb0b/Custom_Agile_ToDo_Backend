@@ -10,7 +10,7 @@ const organizationRoleSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    prerogative: [{
+    prerogativeId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'OrganizationPrerogative'
     }]

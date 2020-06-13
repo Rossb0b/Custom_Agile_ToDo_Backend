@@ -15,30 +15,35 @@ const organizationSchema = mongoose.Schema({
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true,
         },
         roleId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'OrganizationRole',
-            required: true,
         },
+        hasCustomRole: {
+            type: Boolean,
+        }
+    }],
+    role: [{
+        name: {
+            type: String,
+        },
+        prerogativeId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'OrganizationPrerogative',
+        }
     }],
     methodology: [{
-        methodologyId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Methodology',
-            required: false,
-            unique: true,
-        }
     }],
     board: [{
-        boardId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Board',
-            required: false,
-            unique: true,
-        }
     }],
+    lastActivity: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Board',
+    }
 });
 
 organizationSchema.plugin(uniqueValidator);

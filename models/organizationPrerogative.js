@@ -11,6 +11,11 @@ const organizationPrerogativeSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    index: {
+        type: Number,
+        required: true,
+        unique: true
+    }
 });
 
 organizationPrerogativeSchema.plugin(uniqueValidator);
