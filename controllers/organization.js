@@ -4,6 +4,9 @@ const checkMembers = require('../pipes/organization/checkMembers');
 const checkMethodology = require('../pipes/organization/checkMethodology');
 const checkBoard = require('../pipes/organization/checkBoards');
 const findMembers = require('../pipes/organization/findMembers');
+const findRoles = require('../pipes/organization/findRoles');
+const findBoards = require('../pipes/organization/findBoards');
+
 
 /**
 * Async method to create Organization
@@ -65,8 +68,9 @@ exports.getById = async (req, res, next) => {
             });
         } else {
             // // Return members
-            // const members = await findMembers(result.member, result.role);
-            // result.member = members;
+            result.role = await findRoles(result.role);
+            result.member = await findMembers(result.member, result.role);
+            result.board = await findBoards(result.board);
             
             return res.status(200).json({
                 message: 'Organization fetched with success',
@@ -82,7 +86,7 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-exports.getAll() = async (req, res, next) => {
+exports.getAll = async (req, res, next) => {
     try {
         const result = await Organization.find({
             member: {
@@ -97,6 +101,10 @@ exports.getAll() = async (req, res, next) => {
                 message: 'No organization found.'
             })
         } else {
+            for(let i = 0; i < result.length; i++) {
+                result.role[i] = await findRoles(result.role);
+                result.member[i] = await findMembers(result.member, result.role);
+            }
             return res.status(200).json({
                 message: 'Organization fetched successfully.',
                 organizations: result

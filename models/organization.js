@@ -27,10 +27,10 @@ const organizationSchema = mongoose.Schema({
         name: {
             type: String,
         },
-        prerogativeId: {
+        prerogativeId: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'OrganizationPrerogative',
-        }
+        }]
     }],
     methodology: [{
             type: mongoose.Schema.Types.ObjectId,
