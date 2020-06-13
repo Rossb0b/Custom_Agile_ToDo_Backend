@@ -3,6 +3,7 @@ const Organization = require('../models/organization');
 const checkMembers = require('../pipes/organization/checkMembers');
 const checkMethodology = require('../pipes/organization/checkMethodology');
 const checkBoard = require('../pipes/organization/checkBoards');
+const findMembers = require('../pipes/organization/findMembers');
 
 /**
 * Async method to create Organization
@@ -33,8 +34,7 @@ exports.createOrganization = async (req, res, next) => {
         if (error) {
             // console.log(error.errors);
             return res.status(500).json({
-                organization: organization,
-                message: 'Unknow error',
+                message: 'Unknown error',
                 error: error.errors
             });
         } else {
@@ -58,16 +58,49 @@ exports.createOrganization = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
     try {
-        const result = await Organization.findById(req.params.id);
+        let result = (await Organization.findById(req.params.id))._doc;
         if (result === null) {
             return res.status(404).json({
                 message: 'Organization not found'
             });
         } else {
+            // // Return members
+            // const members = await findMembers(result.member, result.role);
+            // result.member = members;
+            
             return res.status(200).json({
                 message: 'Organization fetched with success',
                 organization: result
             })
+        }
+    } catch (error) {
+        // console.log(error);
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+};
+
+exports.getAll() = async (req, res, next) => {
+    try {
+        const result = await Organization.find({
+            member: {
+                userId: {
+                    "$in": [req.userData.userId]
+                }
+            }
+        });
+
+        if (result=== []) {
+            return res.status(404).json({
+                message: 'No organization found.'
+            })
+        } else {
+            return res.status(200).json({
+                message: 'Organization fetched successfully.',
+                organizations: result
+            });
         }
     } catch (error) {
         return res.status(500).json({
