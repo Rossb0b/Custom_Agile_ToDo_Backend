@@ -92,14 +92,40 @@ exports.getAll = async (req, res, next) => {
             'member.userId': req.userData.userId
         });
 
-        if (result=== []) {
+        // console.log(result);
+
+        if (result === []) {
             return res.status(404).json({
                 message: 'No organization found.'
             })
         } else {
             for(let i = 0; i < result.length; i++) {
-                result.role[i] = await findRoles(result.role);
-                result.member[i] = await findMembers(result.member, result.role);
+                result[i].role = await findRoles(result[i].role);
+                const formattedMemberData = await findMembers(result[i].member, result[i].role);
+                for(let y = 0; y < result[i].member.length; y++) {
+                    result[i].member[y] = { user: undefined, role: undefined };
+                    const formattedUserObject = {
+                        organization: formattedMemberData[y].user.organization,
+                        _id: formattedMemberData[y].user._id,
+                        email: formattedMemberData[y].user.email,
+                        firstname: formattedMemberData[y].user.firstname,
+                        lastname: formattedMemberData[y].user.lastname
+                    };
+                    const formattedRoleObject = {
+                        resRole: formattedMemberData[y].role.resRole,
+                        hasCustomRole: formattedMemberData[y].role.hasCustomRole
+                    };
+                    Object.defineProperties(result[i].member[y], {
+                        'user': {
+                            value: formattedUserObject,
+                            writable: true,
+                        },
+                        'role': {
+                            value: formattedRoleObject,
+                            writable: true
+                        }
+                    });
+                }
             }
             return res.status(200).json({
                 message: 'Organization fetched successfully.',
