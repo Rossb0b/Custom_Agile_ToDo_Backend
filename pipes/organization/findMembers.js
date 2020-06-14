@@ -10,7 +10,6 @@ module.exports = async (members, roles) => {
             if (resUser === null) return false;
             const {password, organization, ...formatedUser} = resUser._doc;
             
-            
             // Search role
             let role;
             if (members[i].hasCustomRole) {
@@ -18,9 +17,9 @@ module.exports = async (members, roles) => {
                 role = { role, hasCustomRole: true };
                 
             } else {
-                const resRole = await Prerogative.findById(members[i].roleId);
+                const resRole = (await Prerogative.findById(members[i].roleId))._doc;
                 if (resRole === null) return false;
-                role = { resRole, hasCustomRole: false };
+                role = { ...resRole, hasCustomRole: false };
             }
 
             formatedData.push({
