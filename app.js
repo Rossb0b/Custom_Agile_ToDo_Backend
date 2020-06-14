@@ -7,13 +7,17 @@ const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
 const notificationRoutes = require('./routes/notification');
 const organizationRoutes = require('./routes/organization');
+const organizationRoleRoutes = require('./routes/organizationRole');
+const organizationPrerogativeRoutes = require('./routes/organizationPrerogative');
+
+
 
 const app = express();
 
 mongoose
   .set('useCreateIndex', true)
   .set('useUnifiedTopology', true)
-  .connect("mongodb+srv://Bobby:" + process.env.MONGO_ATLAS_PW + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
+  .connect("mongodb+srv://Bobby:" + "XXFrFPHULs8C7nVM" + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => {
       console.log('connected to database');
     })
@@ -42,5 +46,10 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/organization", organizationRoutes);
+app.use("/api/organizationRole", organizationRoleRoutes);
+app.use("/api/organizationPrerogative", organizationPrerogativeRoutes);
 
 module.exports = app;
+
+
+/** TEST COMMENT */
