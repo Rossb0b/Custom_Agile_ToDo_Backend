@@ -17,21 +17,9 @@ router.put(
 );
 
 router.get(
-    '/boardsByUser/:id',
+    '',
     checkAuth,
-    BoardController.getBoardsByUser
-);
-
-router.get(
-    '/boardsByOrganization/:id',
-    checkAuth,
-    BoardController.getBoardsByOrganization
-);
-
-router.get(
-    '/:id',
-    checkAuth,
-    BoardController.getById
+    BoardController.getBoards
 );
 
 router.delete(
