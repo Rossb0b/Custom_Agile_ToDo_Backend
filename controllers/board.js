@@ -17,13 +17,7 @@ exports.createBoard = async (req, res) => {
     } else {
       try {
         await board.save().then(createdBoard => {
-          res.status(201).json({
-            message: 'Creating a new board succed',
-            board: {
-              ...createdBoard,
-              id: createdBoard._id,
-            },
-          });
+          res.status(201).json(createdBoard._id);
         })
       } catch (e) {
         res.status(500).json({
@@ -83,10 +77,7 @@ exports.getBoards = async (req, res) => {
   if (!req.query.userId && !req.query.organizationId) {
     try {
       const boards = await getBoardsByUser(req.userData.userId);
-      res.status(200).json({
-        message: 'Fetching boards for user connected succeed',
-        boards: boards,
-      });
+      res.status(200).json(boards);
     } catch (e) {
       res.status(500).json({
         message: 'Fetching boards for user connected failed',
@@ -96,10 +87,7 @@ exports.getBoards = async (req, res) => {
   } else if (req.query.userId && req.query.organizationId) {
     try {
       const boards = await getBoardsByOrganizationAndByUser(req.query.userId, req.query.organizationId);
-      res.status(200).json({
-        message: 'Fetching boards for this user in this organization succeed',
-        boards: boards,
-      });
+      res.status(200).json(boards);
     } catch (e) {
       res.status(500).json({
         message: 'Fetching boards for this user in this organization failed',
@@ -109,10 +97,7 @@ exports.getBoards = async (req, res) => {
   } else if (req.query.userId && !req.query.organizationId) {
     try {
       const boards = await getBoardsByUser(req.query.userId);
-      res.status(200).json({
-        message: 'Fetching boards for this user succeed',
-        boards: boards,
-      });
+      res.status(200).json(boards);
     } catch (e) {
       res.status(500).json({
         message: 'Fetching boards for this user failed',
@@ -122,10 +107,7 @@ exports.getBoards = async (req, res) => {
   } else if (!req.query.userId && req.query.organizationId) {
     try {
       const boards = await getBoardsByOrganization(req.query.organizationId);
-      res.status(200).json({
-        message: 'Fetching boards for organization succeed',
-        boards: boards,
-      });
+      res.status(200).json(boards);
     } catch (e) {
       res.status(500).json({
         message: 'Fetching boards for organization failed',
@@ -175,10 +157,7 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
 exports.getById = async (req, res) => {
   try {
     const board = await board.findById(req.params.id);
-    res.status(200).json({
-      message: 'board fetched with success',
-      board: board,
-    });
+    res.status(200).json(board);
   } catch (e) {
     console.log(e);
     res.status(500).json({

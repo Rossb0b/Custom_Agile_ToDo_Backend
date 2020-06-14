@@ -28,10 +28,7 @@ exports.createRole = async (req, res, next) => {
             try {
                 const createdRole = await role.save();
                 console.log(createdRole);
-                return res.status(201).json({
-                    message: 'Role created',
-                    role: createdRole
-                });
+                return res.status(201).json(createdRole);
             } catch (error) {
                 // console.log(error);
                 return res.status(500).json({

@@ -44,10 +44,7 @@ exports.createOrganization = async (req, res, next) => {
             try {
                 const createdOrga = await organization.save();
                 // console.log(createdOrga);
-                return res.status(201).json({
-                    message: 'Organization created',
-                    organizationId: createdOrga._id
-                });
+                return res.status(201).json(createdOrga._id);
             } catch (error) {
                 // console.log(error);
                 return res.status(500).json({
@@ -92,8 +89,6 @@ exports.getAll = async (req, res, next) => {
             'member.userId': req.userData.userId
         });
 
-        // console.log(result);
-
         if (result === []) {
             return res.status(404).json({
                 message: 'No organization found.'
@@ -127,10 +122,7 @@ exports.getAll = async (req, res, next) => {
                     });
                 }
             }
-            return res.status(200).json({
-                message: 'Organization fetched successfully.',
-                organizations: result
-            });
+            return res.status(200).json(result);
         }
     } catch (error) {
         return res.status(500).json({
