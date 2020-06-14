@@ -96,14 +96,15 @@ exports.getAll = async (req, res, next) => {
             }
         });
 
-        if (result=== []) {
+        if (typeof result === Array && result.length === 0) {
             return res.status(404).json({
                 message: 'No organization found.'
             })
         } else {
             for(let i = 0; i < result.length; i++) {
-                result.role[i] = await findRoles(result.role);
-                result.member[i] = await findMembers(result.member, result.role);
+                result[i].role = await findRoles(result.role);
+                result[i].member = await findMembers(result.member, result.role);
+                result[i].board = await findBoards(result);
             }
             return res.status(200).json({
                 message: 'Organization fetched successfully.',
@@ -115,5 +116,20 @@ exports.getAll = async (req, res, next) => {
             message: 'Unexpected error',
             error: error
         });
+    }
+};
+
+// Apply pipes
+// à tester
+async function findElements(roles, members, boards) {
+    let resRole, resMembers, resBoards;
+    if (typeof roles === Array && roles.length > 0) {
+        resRole = await findRoles(result.role);
+    }
+    if (typeof members === Array && members.length > 0) {
+        resMembers = await findMembers(members, resRole);
+    }
+    if (typeof boards === Array && boards.length > 0) {
+        resBoards = await findBoards(boards);
     }
 };
