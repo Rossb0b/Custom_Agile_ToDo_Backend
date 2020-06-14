@@ -15,10 +15,7 @@ exports.createUser = async (req, res, next) => {
   try {
     user.password = await hashPassword(req.body.password);
     const result = await user.save();
-    res.status(201).json({
-      message: 'User created',
-      result: result
-    });
+    res.status(201).json(result);
   } catch (e) {
     console.log(e);
     res.status(500).json({
