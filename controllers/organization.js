@@ -95,34 +95,14 @@ exports.getAll = async (req, res, next) => {
             })
         } else {
             for(let i = 0; i < result.length; i++) {
-                result[i].role = await findRoles(result[i].role);
-                const formattedMemberData = await findMembers(result[i].member, result[i].role);
-                for(let y = 0; y < result[i].member.length; y++) {
-                    result[i].member[y] = { user: undefined, role: undefined };
-                    const formattedUserObject = {
-                        organization: formattedMemberData[y].user.organization,
-                        _id: formattedMemberData[y].user._id,
-                        email: formattedMemberData[y].user.email,
-                        firstname: formattedMemberData[y].user.firstname,
-                        lastname: formattedMemberData[y].user.lastname
-                    };
-                    const formattedRoleObject = {
-                        resRole: formattedMemberData[y].role.resRole,
-                        hasCustomRole: formattedMemberData[y].role.hasCustomRole
-                    };
-                    Object.defineProperties(result[i].member[y], {
-                        'user': {
-                            value: formattedUserObject,
-                            writable: true,
-                        },
-                        'role': {
-                            value: formattedRoleObject,
-                            writable: true
-                        }
-                    });
-                }
+                result[i].role = await findRoles(result.role);
+                result[i].member = await findMembers(result.member, result.role);
+                result[i].board = await findBoards(result);
             }
-            return res.status(200).json(result);
+            return res.status(200).json({
+                message: 'Fetched successfully',
+                organizations: result
+            });
         }
     } catch (error) {
         return res.status(500).json({
