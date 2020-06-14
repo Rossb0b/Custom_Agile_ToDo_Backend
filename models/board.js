@@ -51,7 +51,6 @@ const boardSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
-            unique: true,
         },
         role: {
             type: mongoose.Schema.Types.ObjectId,
