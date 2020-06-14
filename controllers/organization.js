@@ -85,9 +85,12 @@ exports.getById = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        const result = await Organization.find({
-            'member.userId': req.userData.userId
-        });
+        // const result = await Organization.find({
+        //     'member.userId': req.userData.userId
+        // });
+
+        const result = await Organization.find();
+        let formatedData = [];
 
         if (result === []) {
             return res.status(404).json({
@@ -95,16 +98,23 @@ exports.getAll = async (req, res, next) => {
             })
         } else {
             for(let i = 0; i < result.length; i++) {
-                result[i].role = await findRoles(result.role);
-                result[i].member = await findMembers(result.member, result.role);
-                result[i].board = await findBoards(result);
+                formatedData.push({
+                    _id: result[i]._id,
+                    name: result[i].name,
+                    member: (await findMembers(result[i].member, result[i].role)),
+                    role: (await findRoles(result[i].role)),
+                    board: (await findBoards(result[i].board)),
+                    methodology: (await findMethodologies(result[i].methodology)),
+                    lastActivity: result[i].lastActivity
+                });
             }
             return res.status(200).json({
                 message: 'Fetched successfully',
-                organizations: result
+                organizations: formatedData
             });
         }
     } catch (error) {
+        // console.log(error);
         return res.status(500).json({
             message: 'Unexpected error',
             error: error
