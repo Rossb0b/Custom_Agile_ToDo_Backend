@@ -131,3 +131,20 @@ exports.getAll = async (req, res, next) => {
         });
     }
 };
+
+exports.checkOrganizationName = async (req, res) => {
+    try {
+        const result = await Organization.find({ name: req.body.name });
+
+        if (result.length < 1) {
+            res.status(200).json({});
+        } else {
+            res.status(409).json({});
+        }
+    } catch (e) {
+        res.status(500).json({
+            messsage: 'Unknow error',
+            e: e,
+        });
+    }
+}
