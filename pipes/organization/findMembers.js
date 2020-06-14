@@ -8,7 +8,7 @@ module.exports = async (members, roles) => {
             // Search user
             const resUser = await User.findById(members[i].userId);
             if (resUser === null) return false;
-            const {password, ...formatedUser} = resUser._doc;
+            const {password, organization, ...formatedUser} = resUser._doc;
             
             
             // Search role
