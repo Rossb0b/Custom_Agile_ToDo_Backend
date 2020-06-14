@@ -6,7 +6,7 @@ const checkBoard = require('../pipes/organization/checkBoards');
 const findMembers = require('../pipes/organization/findMembers');
 const findRoles = require('../pipes/organization/findRoles');
 const findBoards = require('../pipes/organization/findBoards');
-
+const findMethodologies = require('../pipes/organization/findMethodology');
 
 /**
 * Async method to create Organization
@@ -104,7 +104,7 @@ exports.getAll = async (req, res, next) => {
             for(let i = 0; i < result.length; i++) {
                 result[i].role = await findRoles(result.role);
                 result[i].member = await findMembers(result.member, result.role);
-                result[i].board = await findBoards(result);
+                result[i].board = await findBoards(result.board);
             }
             return res.status(200).json({
                 message: 'Organization fetched successfully.',
@@ -121,15 +121,25 @@ exports.getAll = async (req, res, next) => {
 
 // Apply pipes
 // à tester
-async function findElements(roles, members, boards) {
-    let resRole, resMembers, resBoards;
-    if (typeof roles === Array && roles.length > 0) {
-        resRole = await findRoles(result.role);
-    }
-    if (typeof members === Array && members.length > 0) {
-        resMembers = await findMembers(members, resRole);
-    }
-    if (typeof boards === Array && boards.length > 0) {
-        resBoards = await findBoards(boards);
-    }
-};
+// async function findElements(roles, members, boards, methodologies) {
+//     let resRole, resMembers, resBoards, resMetho;
+//     if (typeof roles === Array && roles.length > 0) {
+//         resRole = await findRoles(result.role);
+//     }
+//     if (typeof members === Array && members.length > 0) {
+//         resMembers = await findMembers(members, resRole);
+//     }
+//     if (typeof boards === Array && boards.length > 0) {
+//         resBoards = await findBoards(boards);
+//     }
+//     if (typeof methodologies === Array && methodologies.length > 0) {
+//         resMetho = await findMethodologies(methodologies);
+//     }
+
+//     return {
+//         roles: resRole,
+//         members: resMembers,
+//         boards: resBoards,
+//         methodologies: resMetho
+//     }
+// };
