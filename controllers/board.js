@@ -156,7 +156,7 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
 
 exports.getById = async (req, res) => {
   try {
-    const board = await board.findById(req.params.id);
+    const board = await Board.findById(req.params.id);
     res.status(200).json(board);
   } catch (e) {
     console.log(e);

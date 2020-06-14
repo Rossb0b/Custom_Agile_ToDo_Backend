@@ -73,6 +73,22 @@ exports.editCard = async (req, res) => {
   });
 };
 
+exports.getCards = async (req, res) => {
+    
+}
+
+getCardsByBoardAndByUser = async (userId, boardId) => {
+    try {
+        return await Card.find({
+        $and: [
+            { boardId: boardId },
+            { worker: userId }
+        ]
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 exports.getById = async (req, res) => {
   try {

@@ -3,6 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const Methodology = require('./methodology');
 const User = require('./user');
+const Board = require('./board');
 
 const cardSchema = mongoose.Schema({
     name: {
@@ -42,7 +43,12 @@ const cardSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology.label',
         unique: true,
-    }]
+    }],
+    boardId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Board',
+        required: true,
+    }
 });
 
 cardSchema.plugin(uniqueValidator);
