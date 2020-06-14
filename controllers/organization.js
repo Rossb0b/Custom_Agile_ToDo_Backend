@@ -89,11 +89,7 @@ exports.getById = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const result = await Organization.find({
-            member: {
-                userId: {
-                    "$in": [req.userData.userId]
-                }
-            }
+            'member.userId': req.userData.userId
         });
 
         if (result=== []) {
