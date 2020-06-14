@@ -14,7 +14,7 @@ module.exports = async (members, roles) => {
             let role;
             if (members[i].hasCustomRole) {
                 role = (roles.filter(x => x._id === members[i].roleId))[0];
-                role = { role, hasCustomRole: true };
+                role = { ...role, hasCustomRole: true };
                 
             } else {
                 const resRole = (await Prerogative.findById(members[i].roleId))._doc;
