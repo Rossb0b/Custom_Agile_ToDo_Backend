@@ -44,10 +44,7 @@ exports.createOrganization = async (req, res, next) => {
             try {
                 const createdOrga = await organization.save();
                 // console.log(createdOrga);
-                return res.status(201).json({
-                    message: 'Organization created',
-                    organizationId: createdOrga._id
-                });
+                return res.status(201).json(createdOrga._id);
             } catch (error) {
                 // console.log(error);
                 return res.status(500).json({
@@ -89,27 +86,43 @@ exports.getById = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const result = await Organization.find({
-            member: {
-                userId: {
-                    "$in": [req.userData.userId]
-                }
-            }
+            'member.userId': req.userData.userId
         });
 
-        if (typeof result === Array && result.length === 0) {
+        if (result === []) {
             return res.status(404).json({
                 message: 'No organization found.'
             })
         } else {
             for(let i = 0; i < result.length; i++) {
-                result[i].role = await findRoles(result.role);
-                result[i].member = await findMembers(result.member, result.role);
-                result[i].board = await findBoards(result.board);
+                result[i].role = await findRoles(result[i].role);
+                const formattedMemberData = await findMembers(result[i].member, result[i].role);
+                for(let y = 0; y < result[i].member.length; y++) {
+                    result[i].member[y] = { user: undefined, role: undefined };
+                    const formattedUserObject = {
+                        organization: formattedMemberData[y].user.organization,
+                        _id: formattedMemberData[y].user._id,
+                        email: formattedMemberData[y].user.email,
+                        firstname: formattedMemberData[y].user.firstname,
+                        lastname: formattedMemberData[y].user.lastname
+                    };
+                    const formattedRoleObject = {
+                        resRole: formattedMemberData[y].role.resRole,
+                        hasCustomRole: formattedMemberData[y].role.hasCustomRole
+                    };
+                    Object.defineProperties(result[i].member[y], {
+                        'user': {
+                            value: formattedUserObject,
+                            writable: true,
+                        },
+                        'role': {
+                            value: formattedRoleObject,
+                            writable: true
+                        }
+                    });
+                }
             }
-            return res.status(200).json({
-                message: 'Organization fetched successfully.',
-                organizations: result
-            });
+            return res.status(200).json(result);
         }
     } catch (error) {
         return res.status(500).json({
@@ -118,6 +131,23 @@ exports.getAll = async (req, res, next) => {
         });
     }
 };
+
+exports.checkOrganizationName = async (req, res) => {
+    try {
+        const result = await Organization.find({ name: req.body.name });
+
+        if (result.length < 1) {
+            res.status(200).json({});
+        } else {
+            res.status(409).json({});
+        }
+    } catch (e) {
+        res.status(500).json({
+            messsage: 'Unknow error',
+            e: e,
+        });
+    }
+}
 
 // Apply pipes
 // à tester

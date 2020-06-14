@@ -19,10 +19,7 @@ exports.createPrerogative = async (req, res, next) => {
                 try {
                     const createdPrerogative = await prerogative.save();
                     // console.log(createdPrerogative);
-                    return res.status(201).json({
-                        message: 'Prerogative created',
-                        prerogative: createdPrerogative
-                    });
+                    return res.status(201).json(createdPrerogative);
                 } catch (error) {
                     // console.log(error);
                     return res.status(500).json({

@@ -11,19 +11,19 @@ const methodologySchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    category: [{
-        name: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        rule: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'CategoryRule',
-            required: true,
-            unique: true,
-        }],
-    }],
+    // category: [{
+    //     name: {
+    //         type: String,
+    //         required: true,
+    //         unique: true,
+    //     },
+    //     rule: [{
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'CategoryRule',
+    //         required: true,
+    //         unique: true,
+    //     }],
+    // }],
     role: [{
         name: {
             type: String,

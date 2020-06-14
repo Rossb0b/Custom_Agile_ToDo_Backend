@@ -44,10 +44,7 @@ exports.getNotificationsForThisUser = async (req, res, next) => {
       userId: req.query.userId,
     });
 
-    res.status(200).json({
-      message: 'Fetched notifications successfully',
-      notifications: notifications,
-    });
+    res.status(200).json(notifications);
   } catch (e) {
     console.log(e);
     res.status(500).json({

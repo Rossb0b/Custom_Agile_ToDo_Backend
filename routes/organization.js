@@ -10,6 +10,12 @@ router.post(
     OrganizationController.createOrganization
 );
 
+router.post(
+    '/nameCheck',
+    AuthGuard,
+    OrganizationController.checkOrganizationName
+);
+
 router.get(
     '/:id',
     AuthGuard,
