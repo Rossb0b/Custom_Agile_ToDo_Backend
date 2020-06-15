@@ -98,11 +98,11 @@ exports.getById = async (req, res, next) => {
 };
 
 exports.getAll = async (req, res, next) => {
-    let resultOrga, resRole;
+    let resultOrga;
     try {
         resultOrga = await Organization.find({
             'member.userId': req.userData.userId
-        });        
+        });
     } catch (error) {
         // console.log(error);
         return res.status(500).json({
@@ -120,19 +120,20 @@ exports.getAll = async (req, res, next) => {
     let formatedData = [];
     let resRole;
     try {
-        for(let i = 0; i < result.length; i++) {
-            resRole = (await findRoles(result[i].role));
+        for(let i = 0; i < resultOrga.length; i++) {
+            resRole = await findRoles(resultOrga[i].role);
             formatedData.push({
-                _id: result[i]._id,
-                name: result[i].name,
+                _id: resultOrga[i]._id,
+                name: resultOrga[i].name,
                 role: resRole,
-                member: (await findMembers(result[i].member, resRole)),
-                board: (await findBoards(result[i].board)),
-                methodology: (await findMethodologies(result[i].methodology)),
-                lastActivity: result[i].lastActivity
+                member: await findMembers(resultOrga[i].member, resRole),
+                board: await findBoards(resultOrga[i].board),
+                methodology: await findMethodologies(resultOrga[i].methodology),
+                lastActivity: resultOrga[i].lastActivity
             });
         }
     } catch (error) {
+        // console.log(error);
         return res.status(500).json({
             message: 'Unexpected error',
             error: error
