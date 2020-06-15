@@ -83,6 +83,7 @@ exports.getById = async (req, res, next) => {
         result.role = await findRoles(result.role);
         result.member = await findMembers(result.member, result.role);
         result.board = await findBoards(result.board);
+        result.methodology = await findMethodologies(result.methodology);
     } catch (error) {
         // console.log(error);
         return res.status(500).json({
@@ -90,6 +91,13 @@ exports.getById = async (req, res, next) => {
             error: error
         });
     }
+
+    result = {
+        ...result,
+        countBoard: result.board.length,
+        countMember: result.member.length,
+        countRole: result.role.length
+    };
 
     res.status(200).json({
         message: 'Organization fetched with success',
@@ -120,17 +128,12 @@ exports.getAll = async (req, res, next) => {
     let formatedData = [];
 
     for(let i = 0; i < resultOrga.length; i++) {
+        let resRole, resMember, resMetho, resBoard;
         try {
-            const resRole = await findRoles(resultOrga[i].role);
-            formatedData.push({
-                _id: resultOrga[i]._id,
-                name: resultOrga[i].name,
-                role: resRole,
-                member: await findMembers(resultOrga[i].member, resRole),
-                board: await findBoards(resultOrga[i].board),
-                methodology: await findMethodologies(resultOrga[i].methodology),
-                lastActivity: resultOrga[i].lastActivity
-            });
+            resRole = await findRoles(resultOrga[i].role);
+            resMember = await findMembers(resultOrga[i].member, resRole);
+            resMetho = await findMethodologies(resultOrga[i].methodology);
+            resBoard = await findBoards(resultOrga[i].board);
         } catch (error) {
             // console.log(error);
             return res.status(500).json({
@@ -138,6 +141,18 @@ exports.getAll = async (req, res, next) => {
                 error: error
             });
         }
+        formatedData.push({
+            _id: resultOrga[i]._id,
+            name: resultOrga[i].name,
+            role: resRole,
+            member: resMember,
+            board: resBoard,
+            methodology: resMetho,
+            lastActivity: resultOrga[i].lastActivity,
+            countBoard: resBoard.length,
+            countMember: resMember.length,
+            countRole: resRole.length
+        });
     }
 
     res.status(200).json({
