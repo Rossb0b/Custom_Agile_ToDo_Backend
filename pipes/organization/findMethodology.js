@@ -13,7 +13,7 @@ module.exports = async (methodologyIds) => {
         }
         return formatedData;
     } catch (error) {
-        // console;log('error findMethodology: ', error);
+        // console.log('error findMethodology: ', error);
         return false;
     }
 };
