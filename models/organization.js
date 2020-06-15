@@ -43,6 +43,7 @@ const organizationSchema = mongoose.Schema({
     lastActivity: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Board',
+        default: null
     }
 });
 
