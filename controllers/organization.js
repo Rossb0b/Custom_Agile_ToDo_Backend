@@ -124,8 +124,6 @@ exports.getAll = async (req, res, next) => {
             message: 'No organization found.'
         });
     }
-
-    let formatedData = [];
     
     for(let i = 0; i < resultOrga.length; i++) {
         resultOrga[i] = resultOrga[i]._doc;
@@ -141,17 +139,18 @@ exports.getAll = async (req, res, next) => {
                 error: error
             });
         }
-        formatedData.push({
+
+        resultOrga[i] = {
             ...resultOrga[i],
             countBoard: resultOrga[i].board.length,
             countMember: resultOrga[i].member.length,
             countRole: resultOrga[i].role.length
-        });
+        };
     }
 
     res.status(200).json({
         message: 'Fetched successfully',
-        organizations: formatedData
+        organizations: resultOrga
     });
 };
 
