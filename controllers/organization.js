@@ -126,14 +126,14 @@ exports.getAll = async (req, res, next) => {
     }
 
     let formatedData = [];
-
+    
     for(let i = 0; i < resultOrga.length; i++) {
-        let resRole, resMember, resMetho, resBoard;
+        resultOrga[i] = resultOrga[i]._doc;
         try {
-            resRole = await findRoles(resultOrga[i].role);
-            resMember = await findMembers(resultOrga[i].member, resRole);
-            resMetho = await findMethodologies(resultOrga[i].methodology);
-            resBoard = await findBoards(resultOrga[i].board);
+            resultOrga[i].role = await findRoles(resultOrga[i].role);
+            resultOrga[i].member = await findMembers(resultOrga[i].member, resultOrga[i].role);
+            resultOrga[i].methodology = await findMethodologies(resultOrga[i].methodology);
+            resultOrga[i].board = await findBoards(resultOrga[i].board);
         } catch (error) {
             // console.log(error);
             return res.status(500).json({
@@ -142,16 +142,10 @@ exports.getAll = async (req, res, next) => {
             });
         }
         formatedData.push({
-            _id: resultOrga[i]._id,
-            name: resultOrga[i].name,
-            role: resRole,
-            member: resMember,
-            board: resBoard,
-            methodology: resMetho,
-            lastActivity: resultOrga[i].lastActivity,
-            countBoard: resBoard.length,
-            countMember: resMember.length,
-            countRole: resRole.length
+            ...resultOrga[i],
+            countBoard: resultOrga[i].board.length,
+            countMember: resultOrga[i].member.length,
+            countRole: resultOrga[i].role.length
         });
     }
 
