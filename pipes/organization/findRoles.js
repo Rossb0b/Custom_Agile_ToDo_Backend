@@ -1,7 +1,7 @@
 const Prerogative = require('../../models/organizationPrerogative');
 
 module.exports = async (roles) => {
-    try {
+    try {        
         let formatedData = [];
         if (roles.length > 0) {
             for (let i = 0; i < roles.length; i++) {
@@ -24,7 +24,7 @@ module.exports = async (roles) => {
         }
         return formatedData;
     } catch (error) {
-        // console;log('error findMembers: ', error);
+        // console.log('error findRole: ', error);
         return false;
     }
 };

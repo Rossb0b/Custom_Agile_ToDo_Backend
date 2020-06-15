@@ -29,7 +29,7 @@ module.exports = async (members, roles) => {
         }
         return formatedData;
     } catch (error) {
-        // console;log('error: ', error);
+        // console.log('error: ', error);
         return false;
     }
 };
