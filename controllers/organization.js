@@ -7,7 +7,7 @@ const findMembers = require('../pipes/organization/findMembers');
 const findRoles = require('../pipes/organization/findRoles');
 const findBoards = require('../pipes/organization/findBoards');
 const findMethodologies = require('../pipes/organization/findMethodology');
-
+const formatMembers = require('../pipes/organization/update/formatMembers');
 /**
 * Async method to create Organization
 *
@@ -157,6 +157,8 @@ exports.getAll = async (req, res, next) => {
 
 exports.updateOrganization = async (req, res) => {
     let result;
+    req.body.member = formatMembers(req.body.member);
+
     try {
         result = await Organization.findByIdAndUpdate(
             req.params.id,
