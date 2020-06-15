@@ -16,6 +16,12 @@ router.post(
     OrganizationController.checkOrganizationName
 );
 
+router.put(
+    '/:id',
+    // AuthGuard,
+    OrganizationController.updateOrganization
+);
+
 router.get(
     '/:id',
     AuthGuard,
