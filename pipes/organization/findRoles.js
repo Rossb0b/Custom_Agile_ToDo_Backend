@@ -8,7 +8,7 @@ module.exports = async (roles) => {
         let result;
         try {
             result = await Prerogative.find({
-                '_id': roles[i].prerogativeId}
+                '_id': roles[i].prerogativeId
             });
         } catch (error) {
             // console.log(error);
