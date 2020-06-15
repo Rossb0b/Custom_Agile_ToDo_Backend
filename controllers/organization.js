@@ -16,20 +16,22 @@ const findMethodologies = require('../pipes/organization/findMethodology');
 */
 exports.createOrganization = async (req, res, next) => {
     const organization = new Organization(req.body);
+    let hasError = []; 
     try {
-        let hasError = [];
-
         organization.member = await checkMembers(organization.member, req.userData, organization.role);
         organization.methodology = await checkMethodology(organization.methodology);
         organization.board = await checkBoard(organization.board);
-
-        if (organization.member.length === 0) hasError.push('Organization need one member at least.');
-
-        if(hasError.length > 0) throw hasError;
     } catch (error) {
         // console.log(error);
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+    if (organization.member.length === 0) hasError.push('Organization need one member at least.');
+    if(hasError.length > 0) {
         return res.status(400).json({
-            message: error.join(' ')
+            message: hasError.join(' ')
         });
     }
 
@@ -37,43 +39,50 @@ exports.createOrganization = async (req, res, next) => {
         if (error) {
             // console.log(error.errors);
             return res.status(500).json({
-                message: 'Unknown error',
+                message: 'Model error',
                 error: error.errors
             });
-        } else {
-            try {
-                const createdOrga = await organization.save();
-                // console.log(createdOrga);
-                return res.status(201).json(createdOrga._id);
-            } catch (error) {
-                // console.log(error);
-                return res.status(500).json({
-                    message: 'Organization creation failed',
-                    error: error,
-                });
-            }
+        } 
+        
+        let createdOrga;
+        try {
+            createdOrga = await organization.save();
+        } catch (error) {
+            // console.log(error);
+            return res.status(500).json({
+                message: 'Organization creation failed',
+                error: error,
+            });
         }
+
+        return res.status(201).json({
+            message: 'Orga found',
+            orgaizationId: createdOrga._id
+        });
     });
 };
 
 exports.getById = async (req, res, next) => {
+    let result;
     try {
-        let result = (await Organization.findById(req.params.id))._doc;
-        if (result === null) {
-            return res.status(404).json({
-                message: 'Organization not found'
-            });
-        } else {
-            // // Return members
-            result.role = await findRoles(result.role);
-            result.member = await findMembers(result.member, result.role);
-            result.board = await findBoards(result.board);
-            
-            return res.status(200).json({
-                message: 'Organization fetched with success',
-                organization: result
-            })
-        }
+        result = (await Organization.findById(req.params.id))._doc;
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+    if (result === null) {
+        return res.status(404).json({
+            message: 'Organization not found'
+        });
+    }
+
+    // Return members
+    try {
+        result.role = await findRoles(result.role);
+        result.member = await findMembers(result.member, result.role);
+        result.board = await findBoards(result.board);
     } catch (error) {
         // console.log(error);
         return res.status(500).json({
@@ -81,37 +90,19 @@ exports.getById = async (req, res, next) => {
             error: error
         });
     }
+
+    return res.status(200).json({
+        message: 'Organization fetched with success',
+        organization: result
+    });
 };
 
 exports.getAll = async (req, res, next) => {
+    let resultOrga, resRole;
     try {
-        const result = await Organization.find({
+        resultOrga = await Organization.find({
             'member.userId': req.userData.userId
-        });
-
-        let formatedData = [];
-        if (result === []) {
-            return res.status(404).json({
-                message: 'No organization found.'
-            })
-        } else {
-            for(let i = 0; i < result.length; i++) {
-                const resRole = (await findRoles(result[i].role));
-                formatedData.push({
-                    _id: result[i]._id,
-                    name: result[i].name,
-                    role: resRole,
-                    member: (await findMembers(result[i].member, resRole)),
-                    board: (await findBoards(result[i].board)),
-                    methodology: (await findMethodologies(result[i].methodology)),
-                    lastActivity: result[i].lastActivity
-                });
-            }
-            return res.status(200).json({
-                message: 'Fetched successfully',
-                organizations: formatedData
-            });
-        }
+        });        
     } catch (error) {
         // console.log(error);
         return res.status(500).json({
@@ -119,6 +110,39 @@ exports.getAll = async (req, res, next) => {
             error: error
         });
     }
+    
+    if (resultOrga === []) {
+        return res.status(404).json({
+            message: 'No organization found.'
+        });
+    }
+
+    let formatedData = [];
+    let resRole;
+    try {
+        for(let i = 0; i < result.length; i++) {
+            resRole = (await findRoles(result[i].role));
+            formatedData.push({
+                _id: result[i]._id,
+                name: result[i].name,
+                role: resRole,
+                member: (await findMembers(result[i].member, resRole)),
+                board: (await findBoards(result[i].board)),
+                methodology: (await findMethodologies(result[i].methodology)),
+                lastActivity: result[i].lastActivity
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+
+    return res.status(200).json({
+        message: 'Fetched successfully',
+        organizations: formatedData
+    });
 };
 
 exports.checkOrganizationName = async (req, res) => {
