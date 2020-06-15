@@ -118,10 +118,10 @@ exports.getAll = async (req, res, next) => {
     }
 
     let formatedData = [];
-    let resRole;
-    try {
-        for(let i = 0; i < resultOrga.length; i++) {
-            resRole = await findRoles(resultOrga[i].role);
+
+    for(let i = 0; i < resultOrga.length; i++) {
+        try {
+            const resRole = await findRoles(resultOrga[i].role);
             formatedData.push({
                 _id: resultOrga[i]._id,
                 name: resultOrga[i].name,
@@ -131,13 +131,13 @@ exports.getAll = async (req, res, next) => {
                 methodology: await findMethodologies(resultOrga[i].methodology),
                 lastActivity: resultOrga[i].lastActivity
             });
+        } catch (error) {
+            // console.log(error);
+            return res.status(500).json({
+                message: 'Unexpected error',
+                error: error
+            });
         }
-    } catch (error) {
-        // console.log(error);
-        return res.status(500).json({
-            message: 'Unexpected error',
-            error: error
-        });
     }
 
     return res.status(200).json({
