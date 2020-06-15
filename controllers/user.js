@@ -35,7 +35,8 @@ exports.getUserFromJWT = async (req, res) => {
 
   try {
     const user = await User.findById(req.userData.userId);
-    res.status(200).json(user);
+    const {password, ...formatedUser} = user._doc;
+    res.status(200).json(formatedUser);
   } catch (e) {
     res.status(401).json({
       message: 'Fetching user failed', e: e,
