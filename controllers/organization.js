@@ -55,7 +55,7 @@ exports.createOrganization = async (req, res, next) => {
             });
         }
 
-        return res.status(201).json({
+        res.status(201).json({
             message: 'Orga found',
             orgaizationId: createdOrga._id
         });
@@ -91,7 +91,7 @@ exports.getById = async (req, res, next) => {
         });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
         message: 'Organization fetched with success',
         organization: result
     });
@@ -140,7 +140,7 @@ exports.getAll = async (req, res, next) => {
         }
     }
 
-    return res.status(200).json({
+    res.status(200).json({
         message: 'Fetched successfully',
         organizations: formatedData
     });
