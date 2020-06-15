@@ -90,18 +90,18 @@ exports.getAll = async (req, res, next) => {
         });
 
         let formatedData = [];
-
         if (result === []) {
             return res.status(404).json({
                 message: 'No organization found.'
             })
         } else {
             for(let i = 0; i < result.length; i++) {
+                const resRole = (await findRoles(result[i].role));
                 formatedData.push({
                     _id: result[i]._id,
                     name: result[i].name,
-                    member: (await findMembers(result[i].member, result[i].role)),
-                    role: (await findRoles(result[i].role)),
+                    role: resRole,
+                    member: (await findMembers(result[i].member, resRole)),
                     board: (await findBoards(result[i].board)),
                     methodology: (await findMethodologies(result[i].methodology)),
                     lastActivity: result[i].lastActivity
