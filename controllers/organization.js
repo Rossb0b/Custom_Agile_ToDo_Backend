@@ -56,7 +56,7 @@ exports.createOrganization = async (req, res, next) => {
         }
 
         res.status(201).json({
-            message: 'Orga found',
+            message: 'Orga created',
             orgaizationId: createdOrga._id
         });
     });
@@ -160,6 +160,44 @@ exports.getAll = async (req, res, next) => {
         organizations: formatedData
     });
 };
+
+exports.updateOrganization = async (req, res) => {
+    let result;
+    try {
+        result = await Organization.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+                new: true,
+                useFindAndModify: false
+            }
+        );
+    } catch (error) {
+        // console.log(error);
+        return res.status(500).json({
+            message: 'Unexpected error.',
+            error: error.errors
+        });
+    }
+
+    result = result._doc;
+    try {
+        result.role = await findRoles(result.role);
+        result.member = await findMembers(result.member, result.role);
+        result.board = await findBoards(result.board);
+        result.methodology = await findMethodologies(result.methodology);
+    } catch (error) {
+        // console.log(error);
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+
+    return res.status(200).json({
+        organization: result
+    });
+}
 
 exports.checkOrganizationName = async (req, res) => {
     try {
