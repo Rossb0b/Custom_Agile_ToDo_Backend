@@ -85,11 +85,10 @@ exports.getById = async (req, res, next) => {
 
 exports.getAll = async (req, res, next) => {
     try {
-        // const result = await Organization.find({
-        //     'member.userId': req.userData.userId
-        // });
+        const result = await Organization.find({
+            'member.userId': req.userData.userId
+        });
 
-        const result = await Organization.find();
         let formatedData = [];
 
         if (result === []) {
