@@ -3,25 +3,30 @@ const User = require('../models/user');
 
 /**
  * Async method to create a new User
- * Init the user send by the request
- * Define the default logo for the user
+ * Init the user send by the request and a result response
+ * Hash the user password
+ * Save the user in DB and the response into result
+ * Declare formatedUser as a User without _id and password
+ * push the formatedUser into the body and call next
  *
- * @returns {json{message<string>, result<User> if success}}
+ * @returns {json{message<string>, next() if success}}
  */
 exports.createUser = async (req, res, next) => {
 
-  const user = new User(req.body);
+  let user = new User(req.body);
+  let result;
 
   try {
     user.password = await hashPassword(req.body.password);
-    const result = await user.save();
+    result = await user.save();
+
     const {_id, password, ...formatedUser} = result._doc;
     req.body = formatedUser;
+    
     next();
   } catch (e) {
-    console.log(e);
     res.status(500).json({
-      message: 'Creation failed',
+      message: 'Creation failed', e: e
     });
   }
 };
@@ -35,16 +40,20 @@ hashPassword = (password) => {
 
 exports.getUserFromJWT = async (req, res) => {
 
+  let user;
+
   try {
-    const user = await User.findById(req.userData.userId);
-    const {password, ...formatedUser} = user._doc;
-    res.status(200).json(formatedUser);
+    user = await User.findById(req.userData.userId);
+    
   } catch (e) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Fetching user failed', e: e,
     });
   }
+  
+  const {password, ...formatedUser} = user._doc;
 
+  res.status(200).json(formatedUser);
 };
 
 /**
@@ -53,13 +62,14 @@ exports.getUserFromJWT = async (req, res) => {
  * @returns {json{user.id<id>}}
  */
 exports.getUserId = async (userEmail) => {
-  try {
-    const user = await User.findOne({
-      email: userEmail
-    });
 
-    return user.id;
+  let user;
+
+  try {
+    user = await User.findOne({ email: userEmail });
   } catch (e) {
     console.log(e);
   }
+
+  return user._id;
 }

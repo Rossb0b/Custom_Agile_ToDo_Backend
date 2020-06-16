@@ -35,6 +35,7 @@ exports.userLogin = async (req, res, next) => {
     }
 
     const {password, ...formatedUser} = user._doc;
+
     for(let i = 0; i < formatedUser.organization.length; i++) {
       const result = (await Organization.findById(formatedUser.organization[i]));
       const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
@@ -50,20 +51,20 @@ exports.userLogin = async (req, res, next) => {
 
     const token = jwtSign({ email: formatedUser.email, userId: formatedUser._id });
 
-    return res.status(200).json({
+    res.status(200).json({
       token: token,
       expiresIn: 3600,
       user: formatedUser
     });
   } catch (e) {
-    // console.log(e);
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Unknown error', e: e
     });
   }
 };
 
 exports.autoLogin = async (req, res) => {
+
   try {
     const user = await User.findOne({
       email: req.body.email
@@ -76,6 +77,7 @@ exports.autoLogin = async (req, res) => {
     }
 
     const {password, ...formatedUser} = user._doc;
+
     for(let i = 0; i < formatedUser.organization.length; i++) {
       const result = (await Organization.findById(formatedUser.organization[i]));
       console.log(result);
@@ -98,7 +100,7 @@ exports.autoLogin = async (req, res) => {
       user: formatedUser
     });
   } catch (e) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Unknown error', e: e
     });
   }
