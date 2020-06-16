@@ -199,6 +199,29 @@ exports.updateOrganization = async (req, res) => {
   });
 }
 
+exports.deleteOrganization = async (req, res) => {
+    let result;
+    try {
+        result = await Organization.deleteOne({_id: req.params.id});
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Unexpected error',
+            error: error
+        });
+    }
+    
+    if(result.deletedCount === 0) {
+        return res.status(404).json({
+            message: 'Not deleted'
+        });
+    }
+
+    return res.status(200).json({
+        message: 'Organization deleted'
+    });
+
+}
+
 exports.checkOrganizationName = async (req, res) => {
 
   let result;

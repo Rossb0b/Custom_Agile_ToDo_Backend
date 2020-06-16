@@ -22,6 +22,12 @@ router.put(
     OrganizationController.updateOrganization
 );
 
+router.delete(
+    '/:id',
+    AuthGuard,
+    OrganizationController.deleteOrganization
+)
+
 router.get(
     '/:id',
     AuthGuard,
