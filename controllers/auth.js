@@ -63,6 +63,47 @@ exports.userLogin = async (req, res, next) => {
   }
 };
 
+exports.autoLogin = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      email: req.body.email
+    });
+
+    if(!user) {
+      return res.status(401).json({
+          message: 'Auth failed'
+      });
+    }
+
+    const {password, ...formatedUser} = user._doc;
+    for(let i = 0; i < formatedUser.organization.length; i++) {
+      const result = (await Organization.findById(formatedUser.organization[i]));
+      console.log(result);
+      const boards = (await Board.find({organizationId: result._id})).filter(x => x.member.includes(user._id));
+      
+      formatedUser.organization[i] = {
+        _id: result._id,
+        name: result.name,
+        memberCount: result.memberCount,
+        lastActivity: await Board.findById(result.lastActivity, 'name'),
+        activeProjectsCount: boards.length
+      };
+    }
+
+    const token = jwtSign({ email: formatedUser.email, userId: formatedUser._id });
+
+    res.status(200).json({
+      token: token,
+      expiresIn: 3600,
+      user: formatedUser
+    });
+  } catch (e) {
+    res.status(401).json({
+      message: 'Unknown error', e: e
+    });
+  }
+}
+
 /**
  * Create a new token of connexion for the identified user
  */
