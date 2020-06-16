@@ -10,22 +10,24 @@ exports.createBoard = async (req, res) => {
   board.validate(async (e) => {
 
     if (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Not a valid board',
         e: e,
       });
-    } else {
-      try {
-        await board.save().then(createdBoard => {
-          res.status(201).json(createdBoard._id);
-        })
-      } catch (e) {
-        res.status(500).json({
-          message: 'Creating a new board failed',
-          e: e,
-        });
-      }
     }
+
+    let createdBoard;
+
+    try {
+      createdBoard = await board.save();
+    } catch (e) {
+      res.status(500).json({
+        message: 'Creating a new board failed',
+        e: e,
+      });
+    }
+
+    res.status(201).json(createdBoard._id);
   });
 };
 
@@ -74,48 +76,51 @@ exports.editBoard = async (req, res) => {
 };
 
 exports.getBoards = async (req, res) => {
+
+  let boards;
+
   if (!req.query.userId && !req.query.organizationId) {
     try {
-      const boards = await getBoardsByUser(req.userData.userId);
-      res.status(200).json(boards);
+      boards = await getBoardsByUser(req.userData.userId);
+      return res.status(200).json(boards);
     } catch (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Fetching boards for user connected failed',
         e: e,
       });
     }
   } else if (req.query.userId && req.query.organizationId) {
     try {
-      const boards = await getBoardsByOrganizationAndByUser(req.query.userId, req.query.organizationId);
-      res.status(200).json(boards);
+      boards = await getBoardsByOrganizationAndByUser(req.query.userId, req.query.organizationId);
+      return res.status(200).json(boards);
     } catch (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Fetching boards for this user in this organization failed',
         e: e,
       });
     }
   } else if (req.query.userId && !req.query.organizationId) {
     try {
-      const boards = await getBoardsByUser(req.query.userId);
-      res.status(200).json(boards);
+      boards = await getBoardsByUser(req.query.userId);
+      return res.status(200).json(boards);
     } catch (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Fetching boards for this user failed',
         e: e,
       });
     }
   } else if (!req.query.userId && req.query.organizationId) {
     try {
-      const boards = await getBoardsByOrganization(req.query.organizationId);
-      res.status(200).json(boards);
+      boards = await getBoardsByOrganization(req.query.organizationId);
+      return res.status(200).json(boards);
     } catch (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Fetching boards for organization failed',
         e: e,
       });
     }
   } else {
-    res.status(400).json({
+    return res.status(400).json({
       message: 'Requires some params or at least, a connected user'
     });
   }
@@ -155,31 +160,33 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
 }
 
 exports.getById = async (req, res) => {
+
+  let board;
+
   try {
-    const board = await Board.findById(req.params.id);
-    res.status(200).json(board);
+    board = await Board.findById(req.params.id);
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Fetching board failed',
       e: e,
     });
   }
+
+  res.status(200).json(board);
 };
 
 exports.deleteBoard = async (req, res) => {
+
+  let result;
+
   try {
-    const result = await Board.findOneAndDelete({
-      _id: req.params.id
-    }).then(() => {
-      res.status(200).json({
-        message: 'deletion succed',
-      });
-    });
+    result = await Board.findOneAndDelete({ _id: req.params.id });
   } catch (e) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'deletion failed',
       e: e,
     });
   }
+
+  res.status(200).json({ message: 'deletion succed', });
 };

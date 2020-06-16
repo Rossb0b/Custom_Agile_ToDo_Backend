@@ -6,32 +6,26 @@ const OrgaPrerogative = require('../models/organizationPrerogative');
  * @return { json{ message<string>, prerogative<organizationPrerogative> }}
  */
 exports.createPrerogative = async (req, res, next) => {
-    const prerogative = new OrgaPrerogative(req.body.prerogative);
+
+  let prerogative = new OrgaPrerogative(req.body.prerogative);
+
+  prerogative.validate(async (error) => {
+    if (error) {
+      return res.status(500).json({
+        message: 'Not valid prerogative'
+      });
+    }
+
+    let createdPrerogative;
 
     try {
-        prerogative.validate(async (error) => {
-            if (error) {
-                // console.log(error);
-                return res.status(500).json({
-                    message: 'Not valid prerogative'
-                });
-            } else {
-                try {
-                    const createdPrerogative = await prerogative.save();
-                    // console.log(createdPrerogative);
-                    return res.status(201).json(createdPrerogative);
-                } catch (error) {
-                    // console.log(error);
-                    return res.status(500).json({
-                        message: 'Unknown error'
-                    });
-                }
-            }
-        });
+      createdPrerogative = await prerogative.save();
     } catch (error) {
-        // console.log(error);
-        return res.status(500).json({
-            message: 'Unknown error'
-        });
+      return res.status(500).json({
+        message: 'Failed to save the prerogative'
+      });
     }
+    
+    return res.status(201).json(createdPrerogative);
+  });
 };
