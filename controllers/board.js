@@ -82,6 +82,7 @@ exports.getBoards = async (req, res) => {
   if (!req.query.userId && !req.query.organizationId) {
     try {
       boards = await getBoardsByUser(req.userData.userId);
+      console.log(boards);
       return res.status(200).json(boards);
     } catch (e) {
       return res.status(500).json({
@@ -130,6 +131,17 @@ getBoardsByUser = async (userId) => {
   try {
     return await Board.find({
       'member.user': userId
+    }).populate({
+      path: 'member',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      },
+    }).populate({
+      path: 'organization',
+      model: 'Organization',
+      select: '_id name'
     });
   } catch (e) {
     console.log(e);
@@ -140,6 +152,17 @@ getBoardsByOrganization = async (organizationId) => {
   try {
     return await Board.find({
       organizationId: organizationId
+    }).populate({
+      path: 'member',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      },
+    }).populate({
+      path: 'organization',
+      model: 'Organization',
+      select: '_id name'
     });
   } catch (e) {
     console.log(e);
@@ -153,6 +176,17 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
         { organizationId: organizationId },
         { 'member.user': userId }
       ]
+    }).populate({
+      path: 'member',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      },
+    }).populate({
+      path: 'organization',
+      model: 'Organization',
+      select: '_id name'
     });
   } catch (e) {
     console.log(e);
@@ -164,7 +198,18 @@ exports.getById = async (req, res) => {
   let board;
 
   try {
-    board = await Board.findById(req.params.id);
+    board = await Board.findById(req.params.id).populate({
+      path: 'member',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      },
+    }).populate({
+      path: 'organization',
+      model: 'Organization',
+      select: '_id name'
+    });
   } catch (e) {
     return res.status(500).json({
       message: 'Fetching board failed',

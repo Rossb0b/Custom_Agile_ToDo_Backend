@@ -61,7 +61,7 @@ const boardSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Card',
     }],
-    organizationId: {
+    organization: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organization',
     },
