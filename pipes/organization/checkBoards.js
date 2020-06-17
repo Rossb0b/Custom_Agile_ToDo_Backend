@@ -1,9 +1,9 @@
 const Board = require('../../models/board');
 
-module.exports = async (boards) => {
+module.exports = async (boardIds) => {
     try {
         let newArr = [];
-        for (let i = 0; i < boards.length; i++) {
+        for (let i = 0; i < boardIds.length; i++) {
             const resBoard = await Board.findById(boards[i].boardId);
             // if response is valid
             if(resBoard) {

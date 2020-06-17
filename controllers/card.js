@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 
-exports.createBoard = async (req, res) => {
+exports.createCard = async (req, res) => {
 
   const card = new Card(req.body);
 
@@ -17,7 +17,7 @@ exports.createBoard = async (req, res) => {
     } else {
       try {
         await card.save().then(createdCard => {
-          res.status(201).json(createdCard._id);
+          res.status(201).json(createdCard);
         })
       } catch (e) {
         res.status(500).json({
@@ -74,25 +74,101 @@ exports.editCard = async (req, res) => {
 };
 
 exports.getCards = async (req, res) => {
-    
+  if (req.query.boardId && !req.query.userId) {
+    try {
+      const cards = await getCardsByBoard(req.query.boardId);
+      res.status(200).json(cards);
+    } catch (e) {
+      res.status(500).json({
+        message: 'Fetching cards for this board failed',
+        e: e,
+      });
+    }
+  } else if (req.query.userId && req.query.boardId) {
+    try {
+      const cards = await getCardsByBoardAndByUser(req.query.userId, req.query.boardId);
+      res.status(200).json(cards);
+    } catch (e) {
+      res.status(500).json({
+        message: 'Fetching cards for this user in this board failed',
+        e: e,
+      });
+    }
+  } else {
+    res.status(400).json({
+      message: 'Requires some params'
+    });
+  }
 }
 
 getCardsByBoardAndByUser = async (userId, boardId) => {
-    try {
-        return await Card.find({
-        $and: [
-            { boardId: boardId },
-            { worker: userId }
-        ]
-        });
-    } catch (e) {
-        console.log(e);
-    }
+  try {
+    return await Card.find({
+      $and: [
+        { board: boardId },
+        { worker: userId }
+      ]
+    }).populate({
+      path: 'comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      }
+    }).populate({
+      path: 'worker',
+      model: 'User',
+      select: ' -password'
+    }).populate({
+      path: 'label',
+      model: 'Methodology.label'
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+getCardsByBoard = async (boardId) => {
+  try {
+    return await Card.find({
+      'boardId': boardId
+    }).populate({
+      path: 'comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      }
+    }).populate({
+      path: 'worker',
+      model: 'User',
+      select: ' -password'
+    }).populate({
+      path: 'label',
+      model: 'Methodology.label'
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 exports.getById = async (req, res) => {
   try {
-    const card = await Card.findById(req.params.id);
+    const card = await Card.findById(req.params.id).populate({
+      path: 'comment',
+      populate: {
+        path: 'user',
+        model: 'User',
+        select: ' -password'
+      }
+    }).populate({
+      path: 'worker',
+      model: 'User',
+      select: ' -password'
+    }).populate({
+      path: 'label',
+      model: 'Methodology.label'
+    });
     res.status(200).json(card);
   } catch (e) {
     console.log(e);

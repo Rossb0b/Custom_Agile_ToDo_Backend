@@ -10,6 +10,7 @@ const boardRoutes = require('./routes/board');
 const organizationRoutes = require('./routes/organization');
 const organizationRoleRoutes = require('./routes/organizationRole');
 const organizationPrerogativeRoutes = require('./routes/organizationPrerogative');
+const cardRoutes = require('./routes/card');
 
 
 
@@ -50,6 +51,7 @@ app.use("/api/board", boardRoutes);
 app.use("/api/organization", organizationRoutes);
 app.use("/api/organizationRole", organizationRoleRoutes);
 app.use("/api/organizationPrerogative", organizationPrerogativeRoutes);
+app.use("/api/card", cardRoutes);
 
 module.exports = app;
 
