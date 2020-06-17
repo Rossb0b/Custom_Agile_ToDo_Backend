@@ -1,5 +1,5 @@
 const express = require('express');
-const BoardController = require('../controllers/board');
+const CardController = require('../controllers/card');
 const checkAuth = require('../middlewares/auth/check-auth');
 
 const router = express.Router();
@@ -7,25 +7,25 @@ const router = express.Router();
 router.post(
     '',
     checkAuth,
-    BoardController.createBoard
+    CardController.createCard
 );
 
 router.put(
     '/:id',
     checkAuth,
-    BoardController.editBoard
+    CardController.editCard
 );
 
 router.get(
     '',
     checkAuth,
-    BoardController.getBoards
+    CardController.getCards
 );
 
 router.delete(
     '/:id',
     checkAuth,
-    BoardController.deleteBoard
+    CardController.deleteCard
 );
 
 module.exports = router;

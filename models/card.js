@@ -42,7 +42,6 @@ const cardSchema = mongoose.Schema({
     label: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology.label',
-        unique: true,
     }],
     boardId: {
         type: mongoose.Schema.Types.ObjectId,
