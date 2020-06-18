@@ -9,11 +9,9 @@ const checkAuth = require('../middlewares/auth/check-auth');
 
 const router = express.Router();
 
-router.post("", UserController.createUser, AuthController.autoLogin);
+router.post("", AddAvatar, UserController.createUser, AuthController.autoLogin);
 
 router.get("", checkAuth, UserController.getUserFromJWT);
-
-router.post("/avatar", AddAvatar);
 
 
 module.exports = router;
