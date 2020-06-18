@@ -51,7 +51,7 @@ module.exports = async (req, res, next) => {
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			message: 'Save image failed',
 			e: error
 		});
