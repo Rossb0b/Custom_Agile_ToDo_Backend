@@ -39,7 +39,6 @@ module.exports = async (req, res, next) => {
 			}
 		).buffer();
 	} catch (error) {
-		// console.log(error);
 		return res.status(500).json({
 			res: error
 		});
@@ -47,7 +46,8 @@ module.exports = async (req, res, next) => {
 
 	const image = response.toString('base64');
 	const dateNow = Date.now();
-	const imagePath = 'images/user/' + dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png';
+	const name = dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png';
+	const imagePath = 'images/user/' + name;
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
 	} catch (error) {
@@ -59,7 +59,7 @@ module.exports = async (req, res, next) => {
 
 	req.body = {
 		...req.body,
-		image: imagePath
+		image: name
 	};
 
 	next();
