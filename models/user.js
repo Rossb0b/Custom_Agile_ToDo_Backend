@@ -24,7 +24,11 @@ const userSchema = mongoose.Schema({
     organization: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Organization',
-    }]
+    }],
+    image: {
+      type: String,
+      required: true
+    }
 });
 
 userSchema.plugin(uniqueValidator);
