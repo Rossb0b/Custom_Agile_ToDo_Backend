@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
 		}
 		const image = dataImage.pop();
 		const dateNow = Date.now();
-		const name = dateNow + '_' + req.body.image.name.toLowerCase().split(' ').join('-');
+		const name = dateNow + '_' + req.body.image.name.trim().toLowerCase().replace(/ /g, '-');
 		const imagePath = 'images/user/' + name;
 		try {
 			await fs.writeFile(imagePath, image, { encoding: 'base64' });
