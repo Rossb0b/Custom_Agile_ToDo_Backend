@@ -11,9 +11,12 @@ module.exports = async (req, res, next) => {
 		const imagePath = 'images/user/' + name + '.' + ext;
 		try {
 			await fs.writeFile(imagePath, image, { encoding: 'base64' });
-			console.log('oui');
+			// console.log('success');
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
+			return res.status(500).json({
+				e: error
+			});
 		}
 		req.body.image.src = name + '.' + ext;
 		next();
@@ -30,28 +33,33 @@ module.exports = async (req, res, next) => {
 			}
 		).buffer();
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 		return res.status(500).json({
 			res: error
 		});
 	}
-
 	const image = response.toString('base64');
 	const dateNow = Date.now();
-	const imagePath = dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png'; // à voir
+	const imagePath = 'images/user/' + dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png'; // à voir
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
-		console.log('success');
+		// console.log('success');
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 		res.status(500).json({
 			e: error
 		});
 	}
 
-	req.body.image.src = imagePath;
+	req.body = {
+		...req.body,
+		image: {
+			src: imagePath
+		}
+	};
 	// replace by next();
 	return res.status(201).json({
+		m: 'ok',
 		res: image
 	});
 }
