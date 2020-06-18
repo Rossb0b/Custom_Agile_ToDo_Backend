@@ -50,7 +50,7 @@ module.exports = async (req, res, next) => {
 	// image = image.split(';base64,').pop();
 
 	const dateNow = Date.now();
-	const name = dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png';
+	const name = dateNow + '_default_avatar.png';
 	const imagePath = 'images/user/' + name;
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
