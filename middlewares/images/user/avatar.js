@@ -38,7 +38,7 @@ module.exports = async (req, res, next) => {
 
 	const image = response.toString('base64');
 	const dateNow = Date.now();
-	const imagePath = dateNow + '_default_' + req.body.lastname + req.body.firstname + '.png'; // à voir
+	const imagePath = dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png'; // à voir
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
 		console.log('success');
