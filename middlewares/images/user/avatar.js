@@ -3,6 +3,7 @@ const got = require('got');
 
 module.exports = async (req, res, next) => {
 
+	// add user image
 	if (req.body.image !== undefined) {
 		const ext = (req.body.image.src.split(';base64,'))[0].split('/').pop();
 		if (ext.toLowerCase() !== ('png' || 'jpg' || 'jpeg')) {
@@ -17,14 +18,13 @@ module.exports = async (req, res, next) => {
 		const imagePath = 'images/user/' + name;
 		try {
 			await fs.writeFile(imagePath, image, { encoding: 'base64' });
-			// console.log('success');
 		} catch (error) {
-			// console.log(error);
 			return res.status(500).json({
+				message: 'Save image failed',
 				e: error
 			});
 		}
-		req.body.image.src = name + '.' + ext;
+		req.body.image = name + '.' + ext;
 		next();
 	}
 
@@ -47,22 +47,19 @@ module.exports = async (req, res, next) => {
 
 	const image = response.toString('base64');
 	const dateNow = Date.now();
-	const imagePath = 'images/user/' + dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png'; // à voir
+	const imagePath = 'images/user/' + dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png';
 	try {
 		await fs.writeFile(imagePath, image, { encoding: 'base64' });
-		// console.log('success');
 	} catch (error) {
-		// console.log(error);
 		res.status(500).json({
+			message: 'Save image failed',
 			e: error
 		});
 	}
 
 	req.body = {
 		...req.body,
-		image: {
-			src: imagePath
-		}
+		image: imagePath
 	};
 
 	next();
