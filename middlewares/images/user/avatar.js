@@ -5,6 +5,12 @@ module.exports = async (req, res, next) => {
 
 	if (req.body.image !== undefined) {
 		const ext = (req.body.image.src.split(';base64,'))[0].split('/').pop();
+		if (ext.toLowerCase() !== ('png' || 'jpg' || 'jpeg')) {
+			return res.status(400).json({
+				message: 'Invalid image format',
+				ext: ext
+			});
+		}
 		const image = req.body.image.src.split(';base64,').pop();
 		const dateNow = Date.now();
 		const name = dateNow + '_' + req.body.image.name.toLowerCase().split(' ').join('-');
@@ -22,7 +28,7 @@ module.exports = async (req, res, next) => {
 		next();
 	}
 
-	// add avatar by default
+	// else add avatar by default
 	let response;
 	try {
 		response = await got(
@@ -38,6 +44,7 @@ module.exports = async (req, res, next) => {
 			res: error
 		});
 	}
+	
 	const image = response.toString('base64');
 	const dateNow = Date.now();
 	const imagePath = 'images/user/' + dateNow + '_default_' + req.body.lastname.toLowerCase() + req.body.firstname.toLowerCase() + '.png'; // à voir
@@ -57,9 +64,6 @@ module.exports = async (req, res, next) => {
 			src: imagePath
 		}
 	};
-	// replace by next();
-	return res.status(201).json({
-		m: 'ok',
-		res: image
-	});
+
+	next();
 }
