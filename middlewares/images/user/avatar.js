@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
 				e: error
 			});
 		}
-		req.body.image = name + '.' + ext;
+		req.body.image = name;
 		next();
 	}
 
