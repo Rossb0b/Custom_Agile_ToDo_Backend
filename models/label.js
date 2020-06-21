@@ -13,7 +13,6 @@ const labelSchema = mongoose.Schema({
             return hexadecimalRegex.test(data);
         },
         required: true,
-        unique: true,
     },
 });
 
