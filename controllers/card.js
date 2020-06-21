@@ -32,6 +32,7 @@ exports.createCard = async (req, res) => {
 exports.editCard = async (req, res) => {
 
   const card = new Card(req.body);
+  let result;
 
   /**
    * Async mongoose method that check that our board respect Board's model
@@ -39,38 +40,31 @@ exports.editCard = async (req, res) => {
   card.validate(async (e) => {
 
     if (e) {
-      res.status(500).json({
+      return res.status(500).json({
         message: 'Not a valid card',
         e: e,
       });
-    } else {
+    }
       try {
         result = await Card.updateOne({ _id: card._id }, card);
-
-        if (result.n > 0) {
-          console.log(result);
-          // res.status(200).json({
-          //     message: 'Updated the card with success',
-          //     board: {
-          //         ...
-          //     }
-          // })
-        } else {
-          console.log(result);
-          // res.status(401).json({
-          //     message: 'Updating the card failed',
-          //     e : ?
-          // });
-        }
       } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'Couldn\'t update the card',
           e: e,
         });
       }
-    }
-
   });
+  
+    if (result.n > 0) {
+      return res.status(200).json({
+          message: 'Updated the card with success',
+          board: result.board,
+      });
+    } else {
+      return res.status(401).json({
+          message: 'Updating the card failed',
+      });
+    }
 };
 
 exports.getCards = async (req, res) => {
