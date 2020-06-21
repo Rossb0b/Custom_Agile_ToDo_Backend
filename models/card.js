@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const Methodology = require('./methodology');
+const Label = require('./label');
 const User = require('./user');
 const Board = require('./board');
 
@@ -41,7 +42,7 @@ const cardSchema = mongoose.Schema({
     }],
     label: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Methodology.label',
+        ref: 'Label',
     }],
     boardId: {
         type: mongoose.Schema.Types.ObjectId,
