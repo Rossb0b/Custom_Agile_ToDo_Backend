@@ -150,7 +150,7 @@ getBoardsByUser = async (userId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'card',
+      path: 'category.card',
       model: 'Card'
     });
   } catch (e) {
@@ -174,7 +174,7 @@ getBoardsByOrganization = async (organizationId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'card',
+      path: 'category.card',
       model: 'Card'
     });
   } catch (e) {
@@ -201,7 +201,7 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'card',
+      path: 'category.card',
       model: 'Card'
     });
   } catch (e) {
@@ -226,7 +226,7 @@ exports.getById = async (req, res) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'card',
+      path: 'category.card',
       model: 'Card'
     });
   } catch (e) {
