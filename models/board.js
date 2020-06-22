@@ -28,6 +28,10 @@ const boardSchema = mongoose.Schema({
         name: {
             type: String,
         },
+        card: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Card',
+        }],
         // rule: [{
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: 'CategoryRule',
@@ -56,10 +60,6 @@ const boardSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'MethodologyRole',
         }
-    }],
-    card: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Card',
     }],
     organization: {
         type: mongoose.Schema.Types.ObjectId,
