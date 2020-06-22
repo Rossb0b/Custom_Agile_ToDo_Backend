@@ -22,6 +22,12 @@ router.get(
     CardController.getCards
 );
 
+router.get(
+    '',
+    checkAuth,
+    CardController.getById
+)
+
 router.delete(
     '/:id',
     checkAuth,
