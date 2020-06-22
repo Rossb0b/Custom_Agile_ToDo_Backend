@@ -121,7 +121,10 @@ getCardsByBoardAndByUser = async (userId, boardId) => {
       select: ' -password'
     }).populate({
       path: 'label',
-      model: 'Methodology.label'
+      model: 'Label'
+    }).populate({
+      path: 'list',
+      model: 'Board.list'
     });
   } catch (e) {
     console.log(e);
@@ -145,7 +148,10 @@ getCardsByBoard = async (boardId) => {
       select: ' -password'
     }).populate({
       path: 'label',
-      model: 'Methodology.label'
+      model: 'Label'
+    }).populate({
+      path: 'list',
+      model: 'Board.list'
     });
   } catch (e) {
     console.log(e);
@@ -167,7 +173,10 @@ exports.getById = async (req, res) => {
       select: ' -password'
     }).populate({
       path: 'label',
-      model: 'Methodology.label'
+      model: 'Label'
+    }).populate({
+      path: 'list',
+      model: 'Board.list'
     });
     res.status(200).json(card);
   } catch (e) {

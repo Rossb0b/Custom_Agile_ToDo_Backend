@@ -36,12 +36,6 @@ const methodologySchema = mongoose.Schema({
             required: true,
             unique: true,
         }]
-    }],
-    label: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Label',
-        required: true,
-        unique: true,
     }]
 });
 

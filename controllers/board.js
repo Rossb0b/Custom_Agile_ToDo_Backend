@@ -4,7 +4,7 @@ exports.createBoard = async (req, res) => {
 
   const board = new Board();
   board.name = req.body.name;
-  board.category = req.body.category;
+  board.list = req.body.list;
   board.member = req.body.member;
   board.organization = req.body.organization;
   console.log(board);
@@ -150,7 +150,7 @@ getBoardsByUser = async (userId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'category.card',
+      path: 'list.card',
       model: 'Card'
     });
   } catch (e) {
@@ -174,7 +174,7 @@ getBoardsByOrganization = async (organizationId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'category.card',
+      path: 'list.card',
       model: 'Card'
     });
   } catch (e) {
@@ -201,7 +201,7 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'category.card',
+      path: 'list.card',
       model: 'Card'
     });
   } catch (e) {
@@ -226,7 +226,7 @@ exports.getById = async (req, res) => {
       model: 'Organization',
       select: '_id name'
     }).populate({
-      path: 'category.card',
+      path: 'list.card',
       model: 'Card'
     });
   } catch (e) {

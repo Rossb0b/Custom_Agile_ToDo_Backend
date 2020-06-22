@@ -41,11 +41,12 @@ const cardSchema = mongoose.Schema({
     }],
     label: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Methodology.label',
+        ref: 'Label',
+        required: false,
     }],
-    category: {
+    list: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Board.category',
+        ref: 'Board.list',
         required: true,
     }
 });

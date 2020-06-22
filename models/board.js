@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const MethodologyRole = require('./methodologyRole');
+const Methodology = require('./methodology');
+const Label = require('./label');
 const Card = require('./card');
 const User = require('./user');
 const Organization = require('./organization');
@@ -24,7 +26,12 @@ const boardSchema = mongoose.Schema({
         ref: 'Methodology',
         required: false,
     },
-    category: [{
+    label: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Label',
+        required: false,
+    }],
+    list: [{
         name: {
             type: String,
         },
