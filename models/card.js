@@ -43,9 +43,9 @@ const cardSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology.label',
     }],
-    boardId: {
+    category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Board',
+        ref: 'Board.category',
         required: true,
     }
 });

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const MethodologyRole = require('./methodologyRole');
+const Card = require('./card');
 const User = require('./user');
 const Organization = require('./organization');
 
@@ -12,39 +13,38 @@ const boardSchema = mongoose.Schema({
     },
     startDate: {
         type: Date,
-        required: true,
+        required: false,
     },
     endDate: {
         type: Date,
-        required: true,
+        required: false,
     },
     methodology: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Methodology',
+        required: false,
     },
     category: [{
         name: {
             type: String,
-            unique: true,
         },
         // rule: [{
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: 'CategoryRule',
         //     required: true,
-        //     unique: true,
         // }],
     }],
     sprintDuration: {
         type: Number,
-        required: true,
+        required: false,
     },
     actualSprintNumber: {
         type: Number,
-        required: true,
+        required: false,
     },
     maxSprintNumber: {
         type: Number,
-        required: true,
+        required: false,
     },
     member: [{
         user: {
@@ -66,7 +66,5 @@ const boardSchema = mongoose.Schema({
         ref: 'Organization',
     },
 });
-
-boardSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('Board', boardSchema);

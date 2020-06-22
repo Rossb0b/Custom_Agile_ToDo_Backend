@@ -2,7 +2,13 @@ const Board = require('../models/board');
 
 exports.createBoard = async (req, res) => {
 
-  const board = new Board(req.body);
+  const board = new Board();
+  board.name = req.body.name;
+  board.category = req.body.category;
+  board.member = req.body.member;
+  board.organization = req.body.organization;
+  console.log(board);
+  console.log(req.body);
 
   /**
    * Async mongoose method that check that our board respect Board's model
@@ -20,6 +26,8 @@ exports.createBoard = async (req, res) => {
 
     try {
       createdBoard = await board.save();
+      console.log(createdBoard);
+      res.status(201).json(createdBoard._id);
     } catch (e) {
       res.status(500).json({
         message: 'Creating a new board failed',
@@ -27,7 +35,6 @@ exports.createBoard = async (req, res) => {
       });
     }
 
-    res.status(201).json(createdBoard._id);
   });
 };
 
@@ -142,6 +149,9 @@ getBoardsByUser = async (userId) => {
       path: 'organization',
       model: 'Organization',
       select: '_id name'
+    }).populate({
+      path: 'card',
+      model: 'Card'
     });
   } catch (e) {
     console.log(e);
@@ -163,6 +173,9 @@ getBoardsByOrganization = async (organizationId) => {
       path: 'organization',
       model: 'Organization',
       select: '_id name'
+    }).populate({
+      path: 'card',
+      model: 'Card'
     });
   } catch (e) {
     console.log(e);
@@ -187,6 +200,9 @@ getBoardsByOrganizationAndByUser = async (userId, organizationId) => {
       path: 'organization',
       model: 'Organization',
       select: '_id name'
+    }).populate({
+      path: 'card',
+      model: 'Card'
     });
   } catch (e) {
     console.log(e);
@@ -209,6 +225,9 @@ exports.getById = async (req, res) => {
       path: 'organization',
       model: 'Organization',
       select: '_id name'
+    }).populate({
+      path: 'card',
+      model: 'Card'
     });
   } catch (e) {
     return res.status(500).json({
