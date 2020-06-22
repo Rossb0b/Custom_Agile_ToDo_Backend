@@ -22,6 +22,12 @@ router.get(
     BoardController.getBoards
 );
 
+router.get(
+    '/:id',
+    checkAuth,
+    BoardController.getById
+)
+
 router.delete(
     '/:id',
     checkAuth,
