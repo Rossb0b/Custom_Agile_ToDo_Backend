@@ -58,10 +58,7 @@ exports.createOrganization = async (req, res, next) => {
       });
     }
 
-    res.status(201).json({
-      message: 'Orga created',
-      orgaizationId: createdOrga._id
-    });
+    res.status(201).json(createdOrga._id);
   });
 };
 
@@ -104,18 +101,15 @@ exports.getById = async (req, res, next) => {
     countRole: result.role.length
   };
 
-  res.status(200).json({
-    message: 'Organization fetched with success',
-    organization: result
-  });
+  res.status(200).json(result);
 };
 
 exports.getAll = async (req, res, next) => {
 
-  let resultOrga;
+  let result;
 
   try {
-    resultOrga = await Organization.find({
+    result = await Organization.find({
       'member.userId': req.userData.userId
     });
   } catch (error) {
@@ -125,19 +119,21 @@ exports.getAll = async (req, res, next) => {
     });
   }
 
-  if (resultOrga === []) {
+  if (result === []) {
     return res.status(404).json({
       message: 'No organization found.'
     });
   }
 
-  for (let i = 0; i < resultOrga.length; i++) {
-    resultOrga[i] = resultOrga[i]._doc;
+  for (let i = 0; i < result.length; i++) {
+
+    result[i] = result[i]._doc;
+
     try {
-      resultOrga[i].role = await findRoles(resultOrga[i].role);
-      resultOrga[i].member = await findMembers(resultOrga[i].member, resultOrga[i].role);
-      resultOrga[i].methodology = await findMethodologies(resultOrga[i].methodology);
-      resultOrga[i].board = await findBoards(resultOrga[i].board);
+      result[i].role = await findRoles(result[i].role);
+      result[i].member = await findMembers(result[i].member, result[i].role);
+      result[i].methodology = await findMethodologies(result[i].methodology);
+      result[i].board = await findBoards(result[i].board);
     } catch (error) {
       return res.status(500).json({
         message: 'Unexpected error',
@@ -145,18 +141,15 @@ exports.getAll = async (req, res, next) => {
       });
     }
 
-    resultOrga[i] = {
-      ...resultOrga[i],
-      countBoard: resultOrga[i].board.length,
-      countMember: resultOrga[i].member.length,
-      countRole: resultOrga[i].role.length
+    result[i] = {
+      ...result[i],
+      countBoard: result[i].board.length,
+      countMember: result[i].member.length,
+      countRole: result[i].role.length
     };
   }
 
-  res.status(200).json({
-    message: 'Fetched successfully',
-    organizations: resultOrga
-  });
+  res.status(200).json(result);
 };
 
 exports.updateOrganization = async (req, res) => {
@@ -194,13 +187,13 @@ exports.updateOrganization = async (req, res) => {
     });
   }
 
-  res.status(200).json({
-    organization: result
-  });
+  res.status(200).json(result);
 }
 
 exports.deleteOrganization = async (req, res) => {
+  
     let result;
+
     try {
         result = await Organization.deleteOne({_id: req.params.id});
     } catch (error) {
