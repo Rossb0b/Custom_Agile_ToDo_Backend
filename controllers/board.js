@@ -57,19 +57,15 @@ exports.editBoard = async (req, res) => {
         result = await Board.updateOne({ _id: board._id }, board);
 
         if (result.n > 0) {
-          console.log(result);
-          // res.status(200).json({
-          //     message: 'Updated the board with success',
-          //     board: {
-          //         ...
-          //     }
-          // })
+          return res.status(200).json({
+              message: 'Updated the board with success',
+              board: board,
+          });
         } else {
-          console.log(result);
-          // res.status(401).json({
-          //     message: 'Updating the board failed',
-          //     e : ?
-          // });
+          return res.status(401).json({
+              message: 'Updating the board failed',
+              e : "Unknow error with the edit",
+          });
         }
       } catch (e) {
         res.status(500).json({
