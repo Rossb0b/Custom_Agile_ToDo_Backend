@@ -9,7 +9,6 @@ const cardSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
     },
     description: {
         type: String,
@@ -37,18 +36,17 @@ const cardSchema = mongoose.Schema({
     worker: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true,
     }],
     label: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Label',
         required: false,
     }],
-    list: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Board.list',
-        required: true,
-    }
+    // list: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Board.list',
+    //     required: true,
+    // }
 });
 
 cardSchema.plugin(uniqueValidator);

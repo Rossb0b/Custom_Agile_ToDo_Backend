@@ -48,19 +48,15 @@ exports.editCard = async (req, res) => {
         result = await Card.updateOne({ _id: card._id }, card);
 
         if (result.n > 0) {
-          console.log(result);
-          // res.status(200).json({
-          //     message: 'Updated the card with success',
-          //     board: {
-          //         ...
-          //     }
-          // })
+          return res.status(200).json({
+              message: 'Updated the card with success',
+              card: card,
+          });
         } else {
-          console.log(result);
-          // res.status(401).json({
-          //     message: 'Updating the card failed',
-          //     e : ?
-          // });
+          return res.status(401).json({
+              message: 'Updating the card failed',
+              e : "Unknow error on card update",
+          });
         }
       } catch (e) {
         res.status(500).json({
