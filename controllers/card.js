@@ -118,9 +118,6 @@ getCardsByBoardAndByUser = async (userId, boardId) => {
     }).populate({
       path: 'label',
       model: 'Label'
-    }).populate({
-      path: 'list',
-      model: 'Board.list'
     });
   } catch (e) {
     console.log(e);
@@ -145,9 +142,6 @@ getCardsByBoard = async (boardId) => {
     }).populate({
       path: 'label',
       model: 'Label'
-    }).populate({
-      path: 'list',
-      model: 'Board.list'
     });
   } catch (e) {
     console.log(e);
@@ -170,9 +164,6 @@ exports.getById = async (req, res) => {
     }).populate({
       path: 'label',
       model: 'Label'
-    }).populate({
-      path: 'list',
-      model: 'Board.list'
     });
     res.status(200).json(card);
   } catch (e) {
