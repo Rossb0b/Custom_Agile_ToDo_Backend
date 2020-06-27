@@ -17,16 +17,16 @@ router.put(
 );
 
 router.get(
-    '',
+    '/:id',
     checkAuth,
-    CardController.getCards
+    CardController.getById
 );
 
 router.get(
     '',
     checkAuth,
-    CardController.getById
-)
+    CardController.getCards
+);
 
 router.delete(
     '/:id',

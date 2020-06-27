@@ -42,11 +42,10 @@ const cardSchema = mongoose.Schema({
         ref: 'Label',
         required: false,
     }],
-    // list: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Board.list',
-    //     required: true,
-    // }
+    list: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    }
 });
 
 cardSchema.plugin(uniqueValidator);
