@@ -18,6 +18,7 @@ const app = express();
 
 mongoose
   .set('useCreateIndex', true)
+  .set('useFindAndModify', false)
   .set('useUnifiedTopology', true)
   .connect("mongodb+srv://Bobby:" + "XXFrFPHULs8C7nVM" + "@cluster0-cnita.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => {

@@ -42,7 +42,7 @@ const cardSchema = mongoose.Schema({
         ref: 'Label',
         required: false,
     }],
-    list: {
+    listId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     }

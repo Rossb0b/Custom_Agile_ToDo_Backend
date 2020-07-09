@@ -1,4 +1,5 @@
 const Card = require('../models/card');
+const Board = require('../models/board');
 
 exports.createCard = async (req, res) => {
 
@@ -16,9 +17,21 @@ exports.createCard = async (req, res) => {
       });
     } else {
       try {
-        await card.save().then(createdCard => {
-          res.status(201).json(createdCard);
-        })
+        await card.save();
+        const listId = card.listId;
+        const board = await Board.findOne({ "list._id": listId });
+
+        for (let list of board.list) {
+          if (list._id.toString() === listId.toString()) {
+            list.card.push(card._id);
+          }
+        }
+
+        await board.save().then(updatedBoard => {
+          res.status(200).json({
+            board: updatedBoard
+          });
+        });
       } catch (e) {
         res.status(500).json({
           message: 'Creating a new card failed',
@@ -45,12 +58,27 @@ exports.editCard = async (req, res) => {
       });
     } else {
       try {
+        const oldCard = await Card.find({ _id: card._id });
         result = await Card.updateOne({ _id: card._id }, card);
 
         if (result.n > 0) {
-          return res.status(200).json({
-              message: 'Updated the card with success',
-              card: card,
+          const listId = card.listId;
+          const board = await Board.findOne({ "list._id": listId });
+
+          for (let list of board.list) {
+            if (list._id.toString() === listId.toString()) {
+              list.card.push(card._id);
+            } else {
+              if (list.indexOf(card._id) > -1) {
+                removeElement(list, card_id);
+              }
+            }
+          }
+
+          await board.save().then(updatedBoard => {
+            res.status(200).json({
+              board: updatedBoard
+            });
           });
         } else {
           return res.status(401).json({
